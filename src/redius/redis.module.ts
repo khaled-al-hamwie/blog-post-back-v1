@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import * as Redis from "redis";
+import { createClient } from "redis";
 import { REDIS } from "./redis.constants";
 
 @Module({
@@ -7,8 +7,7 @@ import { REDIS } from "./redis.constants";
         {
             provide: REDIS,
             useFactory: async () => {
-                const client = Redis.createClient({
-                    url: "rediss://emqx:public@127.0.0.1:6379",
+                const client = createClient({
                     legacyMode: true,
                 });
                 await client.connect();
@@ -18,4 +17,4 @@ import { REDIS } from "./redis.constants";
     ],
     exports: [REDIS],
 })
-export class RediusModule {}
+export class RedisModule {}

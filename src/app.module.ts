@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { RediusModule } from "./redius/redius.module";
+import { RedisModule } from "./redius/redis.module";
 
 @Module({
-    imports: [RediusModule],
+    imports: [RedisModule],
 })
 export class AppModule {}
