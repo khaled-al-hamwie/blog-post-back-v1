@@ -1,10 +1,12 @@
 import { NestFactory } from "@nestjs/core";
 import * as session from "express-session";
 import * as passport from "passport";
+import { MainValidationPipe } from "./core/common/pipes/mainValidation.pipe";
 import { AppModule } from "./modules/app.module";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    app.useGlobalPipes(MainValidationPipe);
     app.use(
         session({
             secret: "my-secret",
