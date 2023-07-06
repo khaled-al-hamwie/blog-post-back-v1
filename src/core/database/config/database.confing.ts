@@ -12,7 +12,8 @@ export const databaseConfig: IDatabaseConfig = {
         port: Number(process.env.DB_PORT),
         type: "mysql",
         autoLoadEntities: true,
-        // synchronize: true,
+        synchronize: true,
+        logging: ["info", "log", "warn", "error", "migration", "schema"],
     },
     test: {
         username: process.env.DB_USER,
