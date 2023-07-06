@@ -1,4 +1,7 @@
-export class LoginUserDto {
-    user_name: string;
-    password: string;
-}
+import { PickType } from "@nestjs/mapped-types";
+import { RegisterUserDto } from "./register-user.dto";
+
+export class LoginUserDto extends PickType(RegisterUserDto, [
+    "password",
+    "user_name",
+]) {}
