@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import * as session from "express-session";
 import * as passport from "passport";
-import { MainValidationPipe } from "./core/common/pipes/mainValidation.pipe";
+import { MainValidationPipe } from "./core/common/pipes/main.validation.pipe";
 import { AppModule } from "./modules/app.module";
 
 async function bootstrap() {
