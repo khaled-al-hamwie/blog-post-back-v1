@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, Logger } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { compareSync, hashSync } from "bcrypt";
 import { FindOneOptions, Repository } from "typeorm";
@@ -21,7 +21,7 @@ export class UsersService {
             throw new ForbiddenException("you can't use this user name");
         createUserDto.password = hashSync(createUserDto.password, 12);
         const user = this.usersRepository.create(createUserDto);
-        this.usersRepository.save(user);
+        await this.usersRepository.save(user);
         return user;
     }
 
