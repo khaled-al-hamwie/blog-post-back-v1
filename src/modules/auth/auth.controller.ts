@@ -11,7 +11,7 @@ import {
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
 import { LocalGuard } from "../../core/common/guards/local.guard";
 import { AuthService } from "./auth.service";
-import { LoginUserDto } from "./dto/login-user.dto";
+
 import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Controller()
@@ -26,7 +26,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post("login")
     @UseGuards(LocalGuard)
-    login(@Body() _loginUserDto: LoginUserDto) {
+    login() {
         return { message: "logged in done" };
     }
 
@@ -36,6 +36,7 @@ export class AuthController {
         return "protected";
     }
 
+    @HttpCode(HttpStatus.OK)
     @Post("logout")
     @UseGuards(LoggedInGuard)
     logout(@Session() session: any) {
