@@ -1,9 +1,9 @@
 import * as dotenv from "dotenv";
-import { IDatabaseConfig } from "../interfaces/dbConfig.interface";
+import { TypeORMDataBase } from "../interfaces/typeORMDataBase.interface";
 
 dotenv.config();
 
-export const databaseConfig: IDatabaseConfig = {
+export const MysqlDatabaseConfig: TypeORMDataBase = {
     development: {
         username: process.env.DB_USER,
         password: process.env.DB_PASS,
