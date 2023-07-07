@@ -1,20 +1,25 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
-import { AuthService } from "../auth.service";
+import { UsersService } from "src/modules/users/users.service";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "local") {
-    constructor(private readonly authService: AuthService) {
+    constructor(private readonly usersService: UsersService) {
         super({
             usernameField: "user_name",
         });
     }
 
     async validate(user_name: string, password: string) {
-        return this.authService.validateUser({
-            user_name: user_name,
+        const user = await this.usersService.validate({
+            user_name,
             password,
         });
+
+        if (!user) {
+            throw new ForbiddenException("credentails don't match");
+        }
+        return user;
     }
 }

@@ -10,11 +10,7 @@ export class AuthService {
         return this.UsersService.create(registerUserDto);
     }
 
-    login() {
+    async login(loginUserDto: LoginUserDto) {
         return `This action returns all auth`;
-    }
-
-    validateUser(user: LoginUserDto) {
-        console.log("hi");
     }
 }
