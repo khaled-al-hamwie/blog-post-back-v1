@@ -6,8 +6,10 @@ import { RegisterUserDto } from "./dto/register-user.dto";
 @Injectable()
 export class AuthService {
     constructor(private readonly UsersService: UsersService) {}
-    register(registerUserDto: RegisterUserDto) {
-        return this.UsersService.create(registerUserDto);
+    async register(registerUserDto: RegisterUserDto) {
+        const user = await this.UsersService.create(registerUserDto);
+        delete user.password;
+        return user;
     }
 
     async login(loginUserDto: LoginUserDto) {
