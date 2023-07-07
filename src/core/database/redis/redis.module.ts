@@ -10,7 +10,6 @@ import { REDIS } from "src/core/constants/redis";
             useFactory: async (configService: ConfigService) => {
                 const client = Redis.createClient({
                     url: configService.get<string>("REDIS_URL"),
-                    legacyMode: true,
                 });
                 await client.connect();
                 return client;
