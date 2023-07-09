@@ -17,10 +17,16 @@ export class SessionsModule implements NestModule {
         consumer
             .apply(
                 session({
-                    store: new RedisStore({ client: this.redis }),
+                    store: new RedisStore({
+                        client: this.redis,
+                        prefix: `${this.configService.get<string>(
+                            "REDIS_DB_NAME",
+                        )}:`,
+                    }),
                     saveUninitialized: false,
                     secret: this.configService.get<string>("SESSION_SECRET"),
                     resave: false,
+
                     cookie: {
                         sameSite: true,
                         httpOnly: false,
