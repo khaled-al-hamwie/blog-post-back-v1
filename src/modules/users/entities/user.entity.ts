@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "src/modules/roles/entities/role.entity";
+import {
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity()
 export class User {
@@ -22,4 +30,8 @@ export class User {
 
     @Column({ nullable: true })
     avatar: string;
+
+    @ManyToOne(() => Role, role => role.users, { nullable: false })
+    @JoinColumn({ name: "role_id" })
+    role: Role;
 }
