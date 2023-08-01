@@ -24,6 +24,7 @@ export class AuthSerializer extends PassportSerializer {
         const user = await this.usersService.findOne({
             where: { user_id: payload.user_id },
         });
+        delete user["password"];
         done(null, user);
     }
 }
