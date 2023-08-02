@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { compareSync, hashSync } from "bcrypt";
 import { FindOneOptions, Repository } from "typeorm";
@@ -59,7 +59,11 @@ export class UsersService {
             where: { user_name },
         });
         if (user && compareSync(password, user.password)) {
-            delete user.password;
+            delete user["password"];
+            delete user["first_name"];
+            delete user["last_name"];
+            delete user["profile"];
+            delete user["avatar"];
             return user;
         }
         return null;
