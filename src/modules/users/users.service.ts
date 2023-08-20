@@ -20,17 +20,12 @@ export class UsersService {
         private readonly userAbilityFactory: UsersAbilityFactory,
     ) {}
     async create(createUserDto: CreateUserDto) {
-        if (createUserDto.user) {
-            const ability = this.userAbilityFactory.createForUser(
-                createUserDto.user,
-            );
-            if (ability.can(Action.Create, User)) console.log("you can create");
-        }
+        let role_id = 1;
+        if (createUserDto.role_id && createUserDto.role_id == 3)
+            role_id = createUserDto.role_id;
         const role = await this.rolesService.findOne({
             where: {
-                name: createUserDto.role_name
-                    ? createUserDto.role_name
-                    : "default",
+                role_id,
             },
         });
         const userWithSameUserName: User = await this.findOne({
