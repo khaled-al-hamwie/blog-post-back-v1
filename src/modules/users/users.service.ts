@@ -3,11 +3,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { compareSync, hashSync } from "bcrypt";
 import { FindOneOptions, Repository } from "typeorm";
 import { LoginUserDto } from "../auth/dto/login-user.dto";
+import { Action } from "../auth/enums/actions.enum";
 import { RolesService } from "../roles/roles.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { UserNameNotAllowedException } from "./exceptions/userNameNotAllowed.exception";
+import { UsersAbilityFactory } from "./factories/users-ability.factory";
 
 @Injectable()
 export class UsersService {
@@ -15,8 +17,15 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,
         private readonly rolesService: RolesService,
+        private readonly userAbilityFactory: UsersAbilityFactory,
     ) {}
     async create(createUserDto: CreateUserDto) {
+        if (createUserDto.user) {
+            const ability = this.userAbilityFactory.createForUser(
+                createUserDto.user,
+            );
+            if (ability.can(Action.Create, User)) console.log("you can create");
+        }
         const role = await this.rolesService.findOne({
             where: {
                 name: createUserDto.role_name
