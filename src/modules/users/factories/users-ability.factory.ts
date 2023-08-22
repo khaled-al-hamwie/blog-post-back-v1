@@ -1,9 +1,7 @@
 import {
     AbilityBuilder,
     ExtractSubjectType,
-    InferSubjects,
     createMongoAbility,
-    defineAbility,
 } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
 import { Action } from "src/modules/auth/enums/actions.enum";
@@ -20,6 +18,7 @@ export class UsersAbilityFactory {
         } else if (user.role.name == "admin") {
             can(Action.Read, User);
             cannot(Action.Read, User, "password");
+            cannot(Action.Read, User, { "role.role_id": 3 });
         } else {
             cannot(Action.Read, User, { user_id: { $ne: user.user_id } });
             cannot(Action.Read, User, "role");

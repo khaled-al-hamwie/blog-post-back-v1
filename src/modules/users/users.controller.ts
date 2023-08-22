@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     UnauthorizedException,
     UseGuards,
@@ -13,6 +14,8 @@ import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
 import { Action } from "../auth/enums/actions.enum";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
+import { UserNotFoundException } from "./exceptions/userNotFound.exception";
+import { UserUnauthorizedException } from "./exceptions/userUnauthorized.exception";
 import { UsersAbilityFactory } from "./factories/users-ability.factory";
 import { UsersService } from "./users.service";
 @UseGuards(LoggedInGuard)
@@ -26,8 +29,6 @@ export class UsersController {
     @Get()
     findAll(@UserDecorator() user: User) {
         const ability = this.usersAbilityFactory.createForUser(user);
-        console.log(user.constructor.name);
-        console.log(ability.can(Action.Read, user));
         if (ability.can(Action.Read, User))
             return this.usersService.findAll({});
         throw new UnauthorizedException();
@@ -43,8 +44,21 @@ export class UsersController {
         return profile;
     }
     @Get(":id")
-    findOne(@Param("id") user_id: string) {
-        // return this.usersService.findOne(+user_id);
+    async findOne(
+        @UserDecorator() user: User,
+        @Param("id", ParseIntPipe) user_id: number,
+    ) {
+        const ability = this.usersAbilityFactory.createForUser(user);
+        if (ability.can(Action.Read, User)) {
+            const requiredUser = await this.usersService.findOne({
+                where: { user_id },
+                relations: { role: true },
+            });
+            if (!requiredUser || ability.cannot(Action.Read, requiredUser))
+                throw new UserNotFoundException();
+            return requiredUser;
+        }
+        throw new UserUnauthorizedException();
     }
 
     @Patch(":id")
