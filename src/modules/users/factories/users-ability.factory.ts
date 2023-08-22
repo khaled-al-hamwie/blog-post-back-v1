@@ -15,15 +15,15 @@ import { User } from "../entities/user.entity";
 export class UsersAbilityFactory {
     createForUser(user: User) {
         const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
-        // if (user.role.name == "admin") {
-        //     cannot(Action.Create, User, {
-        //         first_name: "khaled",
-        //     });
-        //     can(Action.Create, User, { first_name: "booo" });
-        //     // can(Action.Create, User, { role: { role_id: 2 } });
-        // } else if (user.role.name == "super admin") {
-        //     can(Action.Create, User);
-        // }
+        if (user.role.name == "super admin") {
+            can(Action.Manage, "all");
+        } else if (user.role.name == "admin") {
+            can(Action.Read, User);
+            cannot(Action.Read, User, "password");
+        } else {
+            cannot(Action.Read, User, { user_id: { $ne: user.user_id } });
+            cannot(Action.Read, User, "role");
+        }
         return build({
             detectSubjectType: item =>
                 item.constructor as ExtractSubjectType<typeof User>,
