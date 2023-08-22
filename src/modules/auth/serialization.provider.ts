@@ -28,7 +28,6 @@ export class AuthSerializer extends PassportSerializer {
                 role: true,
             },
         });
-        delete user["password"];
         delete user["first_name"];
         delete user["last_name"];
         delete user["profile"];
