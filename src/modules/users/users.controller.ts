@@ -61,9 +61,12 @@ export class UsersController {
         throw new UserUnauthorizedException();
     }
 
-    @Patch(":id")
-    update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.usersService.update(+id, updateUserDto);
+    @Patch()
+    async update(
+        @UserDecorator() user: User,
+        @Body() updateUserDto: UpdateUserDto,
+    ) {
+        await this.usersService.update(user, updateUserDto);
     }
 
     @Delete(":id")
