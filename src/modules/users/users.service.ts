@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { compareSync, hashSync } from "bcrypt";
-import { FindOneOptions, Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import { LoginUserDto } from "../auth/dto/login-user.dto";
 import { Action } from "../auth/enums/actions.enum";
 import { RolesService } from "../roles/roles.service";
@@ -39,8 +39,8 @@ export class UsersService {
         return user;
     }
 
-    findAll() {
-        return `This action returns all users`;
+    findAll(options: FindManyOptions<User>) {
+        return this.usersRepository.find(options);
     }
 
     findOne(options: FindOneOptions): Promise<User> {
