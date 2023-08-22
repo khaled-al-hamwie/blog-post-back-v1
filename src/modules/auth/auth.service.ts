@@ -17,6 +17,7 @@ export class AuthService {
             user: adminUser,
         });
         delete user.password;
+        delete user.role;
         return user;
     }
 

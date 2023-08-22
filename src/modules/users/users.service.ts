@@ -43,8 +43,13 @@ export class UsersService {
         return this.usersRepository.find(options);
     }
 
-    findOne(options: FindOneOptions): Promise<User> {
-        return this.usersRepository.findOne(options);
+    async findOne(
+        options: FindOneOptions,
+        delete_password = true,
+    ): Promise<User> {
+        const requiredUser = await this.usersRepository.findOne(options);
+        if (requiredUser && delete_password) delete requiredUser.password;
+        return requiredUser;
     }
 
     async update(user: User, updateUserDto: UpdateUserDto) {
@@ -63,9 +68,12 @@ export class UsersService {
         user_name,
         password,
     }: LoginUserDto): Promise<Omit<User, "password">> {
-        const user = await this.findOne({
-            where: { user_name },
-        });
+        const user = await this.findOne(
+            {
+                where: { user_name },
+            },
+            false,
+        );
         if (user && compareSync(password, user.password)) {
             delete user["password"];
             delete user["first_name"];
