@@ -18,7 +18,7 @@ export class UsersAbilityFactory {
         } else if (user.role.name == "admin") {
             can(Action.Read, User);
             cannot(Action.Read, User, "password");
-            cannot(Action.Read, User, { "role.role_id": 3 });
+            cannot(Action.Read, User, { "role.role_id": 3 } as any);
         } else {
             cannot(Action.Read, User, { user_id: { $ne: user.user_id } });
             cannot(Action.Read, User, "role");
