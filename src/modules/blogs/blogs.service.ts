@@ -40,7 +40,8 @@ export class BlogsService {
         return { message: "blog has been updated succsesfully" };
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} blog`;
+    remove(blog: Blog) {
+        this.blogRepositry.softRemove(blog);
+        return { message: "blog has been removed succsesfully" };
     }
 }

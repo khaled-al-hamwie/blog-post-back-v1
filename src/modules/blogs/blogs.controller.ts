@@ -70,7 +70,13 @@ export class BlogsController {
             where: { blog_id },
             relations: { user: true },
             select: {
-                user: { user_id: true, user_name: true, avatar: true },
+                user: {
+                    user_id: true,
+                    user_name: true,
+                    avatar: true,
+                    first_name: true,
+                    last_name: true,
+                },
                 blog_id: true,
                 created_at: true,
                 title: true,
@@ -83,6 +89,7 @@ export class BlogsController {
             },
             withDeleted: ability.can(Action.Read, Blog),
         });
+        console.log(blog);
         if (!blog) throw new BlogNotFoundException();
         return blog;
     }
@@ -102,9 +109,21 @@ export class BlogsController {
         throw new UnauthorizedException();
     }
 
-    // all
     @Delete(":id")
-    remove(@Param("id") id: string) {
-        return this.blogsService.remove(+id);
+    async remove(
+        @Param("id", ParseIntPipe) blog_id: number,
+        @UserDecorator() user: User,
+    ) {
+        const ability = this.blogsAbilityFactory.createForUser(user);
+        const blog = await this.blogsService.findOne({
+            where: { blog_id },
+            relations: { user: true },
+        });
+        if (!blog) throw new BlogNotFoundException();
+        if (ability.can(Action.Delete, Blog))
+            return this.blogsService.remove(blog);
+        else if (blog.user.user_id == user.user_id)
+            return this.blogsService.remove(blog);
+        else throw new UnauthorizedException();
     }
 }
