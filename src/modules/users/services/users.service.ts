@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { compareSync, hashSync } from "bcrypt";
 import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
-import { LoginUserDto } from "../../auth/dto/login-user.dto";
 import { RolesService } from "../../roles/roles.service";
 import { CreateUserDto } from "../dto/create-user.dto";
 import { UpdateUserDto } from "../dto/update-user.dto";
