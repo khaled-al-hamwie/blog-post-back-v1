@@ -75,7 +75,30 @@ export class UsersController {
     }
 
     @Delete()
-    remove(@UserDecorator() user: User) {
-        return this.usersService.remove(user);
+    async remove(@UserDecorator("user_id") user_id: number) {
+        const wantedUser = await this.usersService.findOne({
+            where: { user_id },
+        });
+        return this.usersService.remove(wantedUser);
+    }
+
+    @Delete(":id")
+    async block(
+        @UserDecorator() user: User,
+        @Param("id", ParseIntPipe) user_id: number,
+    ) {
+        const ability = this.usersAbilityFactory.createForUser(user);
+        if (ability.cannot(Action.Delete, User))
+            throw new UnauthorizedException();
+        const wantedUser = await this.usersService.findOne({
+            where: { user_id },
+            relations: { role: true },
+        });
+        if (!wantedUser) throw new UserNotFoundException();
+        console.log(ability.can(Action.Delete, wantedUser));
+        if (ability.can(Action.Delete, wantedUser)) {
+            return this.usersService.remove(wantedUser);
+        }
+        throw new UserNotFoundException();
     }
 }
