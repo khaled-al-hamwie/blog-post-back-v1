@@ -53,6 +53,7 @@ export class BlogsController {
                 created_at: true,
                 title: true,
                 sub_title: true,
+                deleted_at: ability.can(Action.Read, Blog),
             },
             withDeleted: ability.can(Action.Read, Blog),
         });
@@ -77,6 +78,7 @@ export class BlogsController {
                 document: true,
                 blog_pic: true,
                 updated_at: true,
+                deleted_at: ability.can(Action.Read, Blog),
             },
             withDeleted: ability.can(Action.Read, Blog),
         });
