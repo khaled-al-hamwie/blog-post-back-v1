@@ -20,7 +20,7 @@ import { User } from "./entities/user.entity";
 import { UserNotFoundException } from "./exceptions/userNotFound.exception";
 import { UserUnauthorizedException } from "./exceptions/userUnauthorized.exception";
 import { UsersAbilityFactory } from "./factories/users-ability.factory";
-import { UsersService } from "./users.service";
+import { UsersService } from "./services/users.service";
 @UseGuards(LoggedInGuard)
 @Controller("users")
 export class UsersController {
