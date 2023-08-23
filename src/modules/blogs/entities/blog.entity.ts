@@ -27,8 +27,8 @@ export class Blog {
     @Column({ type: "varchar", length: 5000 })
     document: string;
 
-    @Column({ type: "time" })
-    time_to_read: Date;
+    @Column({ type: "int" })
+    minute_to_read: number;
 
     @CreateDateColumn()
     created_at: Date;
