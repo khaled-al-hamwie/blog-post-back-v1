@@ -22,6 +22,7 @@ export class BlogsAbilityFactory {
             cannot(Action.Create, Blog);
         } else {
             can(Action.Create, Blog);
+            cannot(Action.Read, Blog);
         }
         return build({
             detectSubjectType: item =>
