@@ -6,16 +6,18 @@ import {
 import { Injectable } from "@nestjs/common";
 import { Action } from "src/modules/auth/enums/actions.enum";
 import { User } from "../entities/user.entity";
+import { UsersRolesService } from "../services/users.roles.service";
 
 // type Subjects = InferSubjects<typeof User> | 'all';
 
 @Injectable()
 export class UsersAbilityFactory {
+    constructor(private readonly usersRolesService: UsersRolesService) {}
     createForUser(user: User) {
         const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
-        if (user.role.name == "super admin") {
-            can(Action.Manage, "all");
-        } else if (user.role.name == "admin") {
+        if (this.usersRolesService.IsSuperAdmin(user)) {
+            can(Action.Manage, User);
+        } else if (this.usersRolesService.IsAdmin(user)) {
             can(Action.Read, User);
             cannot(Action.Read, User, "password");
             cannot(Action.Read, User, { "role.role_id": 3 } as any);

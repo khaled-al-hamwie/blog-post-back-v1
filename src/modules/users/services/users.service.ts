@@ -8,7 +8,6 @@ import { UpdateUserDto } from "../dto/update-user.dto";
 import { User } from "../entities/user.entity";
 import { UserNameNotAllowedException } from "../exceptions/userNameNotAllowed.exception";
 import { UserNotFoundException } from "../exceptions/userNotFound.exception";
-import { UsersAbilityFactory } from "../factories/users-ability.factory";
 
 @Injectable()
 export class UsersService {
@@ -16,7 +15,6 @@ export class UsersService {
         @InjectRepository(User)
         private usersRepository: Repository<User>,
         private readonly rolesService: RolesService,
-        private readonly userAbilityFactory: UsersAbilityFactory,
     ) {}
     async create(createUserDto: CreateUserDto) {
         let role_id = 1;
