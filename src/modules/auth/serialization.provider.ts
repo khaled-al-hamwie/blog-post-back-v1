@@ -1,7 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { PassportSerializer } from "@nestjs/passport";
-
-import { Role } from "../roles/entities/role.entity";
 import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 import { payloadInterface } from "./interfaces/payload.interface";
@@ -28,10 +26,12 @@ export class AuthSerializer extends PassportSerializer {
                 role: true,
             },
         });
-        delete user["first_name"];
-        delete user["last_name"];
-        delete user["profile"];
-        delete user["avatar"];
+        if (user) {
+            delete user["first_name"];
+            delete user["last_name"];
+            delete user["profile"];
+            delete user["avatar"];
+        }
         done(null, user);
     }
 }
