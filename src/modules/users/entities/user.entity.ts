@@ -1,3 +1,4 @@
+import { Blog } from "src/modules/blogs/entities/blog.entity";
 import { Role } from "src/modules/roles/entities/role.entity";
 import {
     Column,
@@ -5,6 +6,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
 } from "typeorm";
 
@@ -37,4 +39,7 @@ export class User {
     @ManyToOne(() => Role, role => role.users, { nullable: false })
     @JoinColumn({ name: "role_id" })
     role: Role;
+
+    @OneToMany(() => Blog, blog => blog.user)
+    blogs: Blog[];
 }
