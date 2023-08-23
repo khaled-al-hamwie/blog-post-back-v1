@@ -21,7 +21,7 @@ export class Blog {
     @Column({ type: "varchar", length: 45, nullable: true })
     sub_title: string;
 
-    @Column({ type: "varchar", length: 1000 })
+    @Column({ type: "varchar", length: 1000, nullable: true })
     blog_pic: string;
 
     @Column({ type: "varchar", length: 5000 })
