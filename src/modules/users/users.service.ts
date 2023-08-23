@@ -57,11 +57,15 @@ export class UsersService {
             where: { user_id: user.user_id },
         });
         this.usersRepository.save({ ...requiredUser, ...updateUserDto });
-        return { message: "user has been updated succsesfuly" };
+        return { message: "user has been updated succsesfully" };
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} user`;
+    async remove(user: User) {
+        const requiredUser = await this.findOne({
+            where: { user_id: user.user_id },
+        });
+        this.usersRepository.softRemove(requiredUser);
+        return { message: "user has been removed succsesfully" };
     }
 
     async validate({
