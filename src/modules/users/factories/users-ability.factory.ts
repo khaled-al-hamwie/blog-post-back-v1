@@ -19,9 +19,14 @@ export class UsersAbilityFactory {
             can(Action.Read, User);
             cannot(Action.Read, User, "password");
             cannot(Action.Read, User, { "role.role_id": 3 } as any);
+
+            can(Action.Delete, User);
+            cannot(Action.Delete, User, { "role.role_id": 3 } as any);
+            cannot(Action.Delete, User, { "role.role_id": 2 } as any);
         } else {
             cannot(Action.Read, User, { user_id: { $ne: user.user_id } });
             cannot(Action.Read, User, "role");
+            cannot(Action.Delete, User);
         }
         return build({
             detectSubjectType: item =>
