@@ -12,10 +12,13 @@ export class LocalStrategy extends PassportStrategy(Strategy, "local") {
     }
 
     async validate(user_name: string, password: string) {
-        const user = await this.usersService.validate({
-            user_name,
-            password,
-        });
+        const sendUser = await this.usersService.findOne(
+            {
+                where: { user_name },
+            },
+            false,
+        );
+        const user = await this.usersService.validate(sendUser, password);
 
         if (!user) {
             throw new ForbiddenException("credentails don't match");

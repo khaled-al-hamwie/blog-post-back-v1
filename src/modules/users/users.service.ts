@@ -67,16 +67,10 @@ export class UsersService {
         return { message: "user has been removed succsesfully" };
     }
 
-    async validate({
-        user_name,
-        password,
-    }: LoginUserDto): Promise<Omit<User, "password">> {
-        const user = await this.findOne(
-            {
-                where: { user_name },
-            },
-            false,
-        );
+    async validate(
+        user: User,
+        password: string,
+    ): Promise<Omit<User, "password">> {
         if (user && compareSync(password, user.password)) {
             delete user["password"];
             delete user["first_name"];
