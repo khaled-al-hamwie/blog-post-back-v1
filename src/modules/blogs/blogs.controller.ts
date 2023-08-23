@@ -7,15 +7,18 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     UnauthorizedException,
     UseGuards,
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
+import { IsNull, Like, Not } from "typeorm";
 import { Action } from "../auth/enums/actions.enum";
 import { User } from "../users/entities/user.entity";
 import { BlogsService } from "./blogs.service";
 import { CreateBlogDto } from "./dto/create-blog.dto";
+import { FindAllBlogDto } from "./dto/find-all-blog.dto";
 import { UpdateBlogDto } from "./dto/update-blog.dto";
 import { Blog } from "./entities/blog.entity";
 import { BlogNotFoundException } from "./exceptions/BlogNotFound.exception";
@@ -39,13 +42,26 @@ export class BlogsController {
         throw new UnauthorizedException();
     }
 
-    // find by title or user_name or by created_at certain time
+    // created_at certain time
     // or only mine and only deleted and page option
     // sort by created at or by most liked
     @Get()
-    findAll(@UserDecorator() user: User) {
+    findAll(
+        @UserDecorator() user: User,
+        @Query() findAllBlogDto: FindAllBlogDto,
+    ) {
         const ability = this.blogsAbilityFactory.createForUser(user);
         return this.blogsService.findAll({
+            where: {
+                title: findAllBlogDto.title
+                    ? Like(findAllBlogDto.title)
+                    : Not(IsNull()),
+                user: {
+                    user_name: findAllBlogDto.user_name
+                        ? findAllBlogDto.user_name
+                        : Not(IsNull()),
+                },
+            },
             order: { created_at: "DESC" },
             relations: { user: true },
             select: {
@@ -56,6 +72,8 @@ export class BlogsController {
                 sub_title: true,
                 deleted_at: ability.can(Action.Read, Blog),
             },
+            take: 10,
+            skip: findAllBlogDto.page ? findAllBlogDto.page * 10 : 0,
             withDeleted: ability.can(Action.Read, Blog),
         });
     }
@@ -89,12 +107,10 @@ export class BlogsController {
             },
             withDeleted: ability.can(Action.Read, Blog),
         });
-        console.log(blog);
         if (!blog) throw new BlogNotFoundException();
         return blog;
     }
 
-    // only his
     @Patch(":id")
     update(
         @UserDecorator() user: User,
