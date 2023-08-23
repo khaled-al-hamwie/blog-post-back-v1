@@ -3,12 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { compareSync, hashSync } from "bcrypt";
 import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import { LoginUserDto } from "../auth/dto/login-user.dto";
-import { Action } from "../auth/enums/actions.enum";
 import { RolesService } from "../roles/roles.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { UserNameNotAllowedException } from "./exceptions/userNameNotAllowed.exception";
+import { UserNotFoundException } from "./exceptions/userNotFound.exception";
 import { UsersAbilityFactory } from "./factories/users-ability.factory";
 
 @Injectable()
@@ -62,10 +62,8 @@ export class UsersService {
     }
 
     async remove(user: User) {
-        const requiredUser = await this.findOne({
-            where: { user_id: user.user_id },
-        });
-        this.usersRepository.softRemove(requiredUser);
+        if (!user) throw new UserNotFoundException();
+        this.usersRepository.softRemove(user);
         return { message: "user has been removed succsesfully" };
     }
 
