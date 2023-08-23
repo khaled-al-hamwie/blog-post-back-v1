@@ -6,12 +6,15 @@ import {
     Param,
     ParseIntPipe,
     Patch,
+    Post,
     UnauthorizedException,
     UseGuards,
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
+import { IsNull, Not } from "typeorm";
 import { Action } from "../auth/enums/actions.enum";
+import { RestoreUserDto } from "./dto/restore-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { UserNotFoundException } from "./exceptions/userNotFound.exception";
@@ -82,6 +85,29 @@ export class UsersController {
         return this.usersService.remove(wantedUser);
     }
 
+    @Post("restore")
+    async restore(
+        @UserDecorator() user: User,
+        @Body() restoreUserDto: RestoreUserDto,
+    ) {
+        const ability = this.usersAbilityFactory.createForUser(user);
+        if (ability.cannot(Action.Restore, User))
+            throw new UnauthorizedException();
+        const wantedUser = await this.usersService.findOne({
+            where: {
+                user_name: restoreUserDto.user_name,
+                deleted_at: Not(IsNull()),
+            },
+            relations: { role: true },
+            withDeleted: true,
+        });
+        if (!wantedUser) throw new UserNotFoundException();
+        if (ability.can(Action.Restore, wantedUser)) {
+            return this.usersService.restore(wantedUser);
+        }
+        throw new UserNotFoundException();
+    }
+
     @Delete(":id")
     async block(
         @UserDecorator() user: User,
@@ -95,7 +121,6 @@ export class UsersController {
             relations: { role: true },
         });
         if (!wantedUser) throw new UserNotFoundException();
-        console.log(ability.can(Action.Delete, wantedUser));
         if (ability.can(Action.Delete, wantedUser)) {
             return this.usersService.remove(wantedUser);
         }
