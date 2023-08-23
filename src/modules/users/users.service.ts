@@ -30,6 +30,7 @@ export class UsersService {
         });
         const userWithSameUserName: User = await this.findOne({
             where: { user_name: createUserDto.user_name },
+            withDeleted: true,
         });
         if (userWithSameUserName) throw new UserNameNotAllowedException();
         createUserDto.password = hashSync(createUserDto.password, 12);

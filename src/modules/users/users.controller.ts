@@ -30,7 +30,13 @@ export class UsersController {
     findAll(@UserDecorator() user: User) {
         const ability = this.usersAbilityFactory.createForUser(user);
         if (ability.can(Action.Read, User))
-            return this.usersService.findAll({});
+            return this.usersService.findAll({
+                select: {
+                    user_id: true,
+                    first_name: true,
+                    last_name: true,
+                },
+            });
         throw new UnauthorizedException();
     }
     @Get("profile")
@@ -40,7 +46,6 @@ export class UsersController {
             where: { user_id: user.user_id },
             relations: { role: ability.can(Action.Read, User, "role") },
         });
-        delete profile.password;
         return profile;
     }
     @Get(":id")
