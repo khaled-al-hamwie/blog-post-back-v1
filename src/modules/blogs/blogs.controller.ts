@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Patch,
     Post,
     UnauthorizedException,
@@ -17,6 +18,7 @@ import { BlogsService } from "./blogs.service";
 import { CreateBlogDto } from "./dto/create-blog.dto";
 import { UpdateBlogDto } from "./dto/update-blog.dto";
 import { Blog } from "./entities/blog.entity";
+import { BlogNotFoundException } from "./exceptions/BlogNotFound.exception";
 import { BlogsAbilityFactory } from "./factories/blogs-ability.factory";
 
 @UseGuards(LoggedInGuard)
@@ -37,16 +39,49 @@ export class BlogsController {
         throw new UnauthorizedException();
     }
 
-    // all and if you are admin you can see the deleted post
+    // find by title or user_name or by created_at certain time or only mine
+    // sort by created at or by most liked
     @Get()
-    findAll() {
-        return this.blogsService.findAll();
+    findAll(@UserDecorator() user: User) {
+        const ability = this.blogsAbilityFactory.createForUser(user);
+        return this.blogsService.findAll({
+            order: { created_at: "DESC" },
+            relations: { user: true },
+            select: {
+                user: { user_id: true, user_name: true, avatar: true },
+                blog_id: true,
+                created_at: true,
+                title: true,
+                sub_title: true,
+            },
+            withDeleted: ability.can(Action.Read, Blog),
+        });
     }
 
-    // all
     @Get(":id")
-    findOne(@Param("id") id: string) {
-        return this.blogsService.findOne(+id);
+    async findOne(
+        @Param("id", ParseIntPipe) blog_id: number,
+        @UserDecorator() user: User,
+    ) {
+        const ability = this.blogsAbilityFactory.createForUser(user);
+        const blog = await this.blogsService.findOne({
+            where: { blog_id },
+            relations: { user: true },
+            select: {
+                user: { user_id: true, user_name: true, avatar: true },
+                blog_id: true,
+                created_at: true,
+                title: true,
+                sub_title: true,
+                minute_to_read: true,
+                document: true,
+                blog_pic: true,
+                updated_at: true,
+            },
+            withDeleted: ability.can(Action.Read, Blog),
+        });
+        if (!blog) throw new BlogNotFoundException();
+        return blog;
     }
 
     // only his
