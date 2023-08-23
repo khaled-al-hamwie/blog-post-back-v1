@@ -39,7 +39,8 @@ export class BlogsController {
         throw new UnauthorizedException();
     }
 
-    // find by title or user_name or by created_at certain time or only mine
+    // find by title or user_name or by created_at certain time
+    // or only mine and only deleted and page option
     // sort by created at or by most liked
     @Get()
     findAll(@UserDecorator() user: User) {
@@ -88,8 +89,17 @@ export class BlogsController {
 
     // only his
     @Patch(":id")
-    update(@Param("id") id: string, @Body() updateBlogDto: UpdateBlogDto) {
-        return this.blogsService.update(+id, updateBlogDto);
+    update(
+        @UserDecorator() user: User,
+        @Param("id", ParseIntPipe) blog_id: number,
+        @Body() updateBlogDto: UpdateBlogDto,
+    ) {
+        const ability = this.blogsAbilityFactory.createForUser(user);
+        if (ability.can(Action.Update, Blog)) {
+            updateBlogDto.author_id = user.user_id;
+            return this.blogsService.update(blog_id, updateBlogDto);
+        }
+        throw new UnauthorizedException();
     }
 
     // all

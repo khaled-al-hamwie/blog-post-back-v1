@@ -17,11 +17,14 @@ export class BlogsAbilityFactory {
         if (user.role.name == "super admin") {
             can(Action.Manage, Blog);
             cannot(Action.Create, Blog);
+            cannot(Action.Update, Blog);
         } else if (user.role.name == "admin") {
             can(Action.Read, Blog);
             cannot(Action.Create, Blog);
+            cannot(Action.Update, Blog);
         } else {
             can(Action.Create, Blog);
+            can(Action.Update, Blog);
             cannot(Action.Read, Blog);
         }
         return build({
