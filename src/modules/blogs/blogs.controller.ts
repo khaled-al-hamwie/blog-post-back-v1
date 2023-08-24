@@ -13,7 +13,7 @@ import {
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
-import { IsNull, Like, Not } from "typeorm";
+import { FindManyOptions } from "typeorm";
 import { Action } from "../auth/enums/actions.enum";
 import { User } from "../users/entities/user.entity";
 import { BlogsService } from "./blogs.service";
@@ -23,6 +23,7 @@ import { UpdateBlogDto } from "./dto/update-blog.dto";
 import { Blog } from "./entities/blog.entity";
 import { BlogNotFoundException } from "./exceptions/BlogNotFound.exception";
 import { BlogsAbilityFactory } from "./factories/blogs-ability.factory";
+import { BlogsFindAllProvider } from "./providers/blogs.findAll.provider";
 
 @UseGuards(LoggedInGuard)
 @Controller("blogs")
@@ -30,6 +31,7 @@ export class BlogsController {
     constructor(
         private readonly blogsService: BlogsService,
         private readonly blogsAbilityFactory: BlogsAbilityFactory,
+        private readonly blogsFindAllProvider: BlogsFindAllProvider,
     ) {}
 
     @Post()
@@ -42,7 +44,6 @@ export class BlogsController {
         throw new UnauthorizedException();
     }
 
-    // created_at certain time
     // or only mine and only deleted and page option
     // sort by created at or by most liked
     @Get()
@@ -50,32 +51,9 @@ export class BlogsController {
         @UserDecorator() user: User,
         @Query() findAllBlogDto: FindAllBlogDto,
     ) {
-        const ability = this.blogsAbilityFactory.createForUser(user);
-        return this.blogsService.findAll({
-            where: {
-                title: findAllBlogDto.title
-                    ? Like(findAllBlogDto.title)
-                    : Not(IsNull()),
-                user: {
-                    user_name: findAllBlogDto.user_name
-                        ? findAllBlogDto.user_name
-                        : Not(IsNull()),
-                },
-            },
-            order: { created_at: "DESC" },
-            relations: { user: true },
-            select: {
-                user: { user_id: true, user_name: true, avatar: true },
-                blog_id: true,
-                created_at: true,
-                title: true,
-                sub_title: true,
-                deleted_at: ability.can(Action.Read, Blog),
-            },
-            take: 10,
-            skip: findAllBlogDto.page ? findAllBlogDto.page * 10 : 0,
-            withDeleted: ability.can(Action.Read, Blog),
-        });
+        const option: FindManyOptions<Blog> =
+            this.blogsFindAllProvider.GetOptions(findAllBlogDto, user);
+        return this.blogsService.findAll(option);
     }
 
     @Get(":id")
