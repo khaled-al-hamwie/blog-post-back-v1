@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsInt, IsOptional, IsString, Min } from "class-validator";
+import { IsISO8601, IsInt, IsOptional, IsString, Min } from "class-validator";
 
 export class FindAllBlogDto {
     @IsOptional()
@@ -15,4 +15,12 @@ export class FindAllBlogDto {
     @IsInt()
     @Min(0)
     page: number;
+
+    @IsOptional()
+    @IsISO8601()
+    created_after: string;
+
+    @IsOptional()
+    @IsISO8601()
+    created_before: string;
 }
