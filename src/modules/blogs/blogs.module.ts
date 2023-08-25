@@ -17,5 +17,6 @@ import { BlogsFindOneProvider } from "./providers/blogs.findOne.provider";
         BlogsFindAllProvider,
         BlogsFindOneProvider,
     ],
+    exports: [BlogsService],
 })
 export class BlogsModule {}
