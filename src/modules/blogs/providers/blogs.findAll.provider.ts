@@ -91,10 +91,4 @@ export class BlogsFindAllProvider {
         };
         return select;
     }
-
-    GetWithDeleted(findAllBlogDto: FindAllBlogDto): boolean {
-        // if user is admin and only delteted return t
-        // if user is not admin and only delete return t
-        if (findAllBlogDto.only_deleted) return true;
-    }
 }
