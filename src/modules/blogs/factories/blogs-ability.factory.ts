@@ -4,29 +4,43 @@ import {
     createMongoAbility,
 } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
-import { Action } from "src/modules/auth/enums/actions.enum";
 import { User } from "src/modules/users/entities/user.entity";
 import { Blog } from "../entities/blog.entity";
-
-// type Subjects = InferSubjects<typeof User> | 'all';
+import { BlogAction } from "../enums/blogs.actions.enum";
 
 @Injectable()
 export class BlogsAbilityFactory {
     createForUser(user: User) {
         const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
-        if (user.role.name == "super admin") {
-            can(Action.Manage, Blog);
-        } else if (user.role.name == "admin") {
-            can(Action.Read, Blog);
-            cannot(Action.Create, Blog);
-            cannot(Action.Update, Blog);
-            can(Action.Delete, Blog);
-        } else {
-            can(Action.Create, Blog);
-            can(Action.Update, Blog);
-            cannot(Action.Read, Blog);
+        if (user.role.name == "admin" || user.role.name == "super admin") {
+            can(BlogAction.ReadBlog, Blog);
+            can(BlogAction.ReadDeletedBlog, Blog);
 
-            cannot(Action.Delete, Blog);
+            cannot(BlogAction.CreateBlog, Blog);
+            cannot(BlogAction.UpdateBlog, Blog);
+            can(BlogAction.DeleteBlog, Blog);
+        } else {
+            can(BlogAction.ReadBlog, Blog, { deleted_at: null });
+            can(BlogAction.ReadBlog, Blog, {
+                "user.user_id": user.user_id,
+                deleted_at: { $ne: null },
+            } as any);
+            cannot(BlogAction.ReadBlog, Blog, {
+                "user.user_id": { $ne: user.user_id },
+                deleted_at: { $ne: null },
+            } as any);
+
+            cannot(BlogAction.ReadDeletedBlog, Blog);
+
+            can(BlogAction.CreateBlog, Blog);
+
+            can(BlogAction.UpdateBlog, Blog, {
+                "user.user_id": user.user_id,
+            } as any);
+
+            can(BlogAction.DeleteBlog, Blog, {
+                "user.user_id": user.user_id,
+            } as any);
         }
         return build({
             detectSubjectType: item =>
@@ -34,5 +48,3 @@ export class BlogsAbilityFactory {
         });
     }
 }
-// if the user is admin or supper-admin he can create an admin
-//
