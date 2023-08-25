@@ -1,3 +1,4 @@
+import { Like } from "src/modules/likes/entities/like.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import {
     Column,
@@ -6,6 +7,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -42,4 +44,7 @@ export class Blog {
     @ManyToOne(() => User, user => user.blogs, { nullable: false })
     @JoinColumn({ name: "author_id" })
     user: User;
+
+    @OneToMany(() => Like, like => like.blog)
+    likes: Like[];
 }
