@@ -1,15 +1,16 @@
 import { AbilityTuple, MongoAbility, MongoQuery } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
-import { Action } from "src/modules/auth/enums/actions.enum";
 import { User } from "src/modules/users/entities/user.entity";
 import {
     And,
     FindManyOptions,
     FindOptionsSelect,
     FindOptionsWhere,
+    IsNull,
     LessThanOrEqual,
     Like,
     MoreThanOrEqual,
+    Not,
 } from "typeorm";
 import { FindAllBlogDto } from "../dto/find-all-blog.dto";
 import { Blog } from "../entities/blog.entity";
@@ -30,7 +31,8 @@ export class BlogsFindAllProvider {
         option.select = this.GetSelectOptions(ability);
         option.take = 10;
         option.skip = findAllBlogDto.page ? findAllBlogDto.page * 10 : 0;
-        option.withDeleted = ability.can(Action.Read, Blog);
+        option.relations = { user: true };
+        option.withDeleted = findAllBlogDto.only_deleted;
         return option;
     }
 
@@ -60,6 +62,19 @@ export class BlogsFindAllProvider {
                 MoreThanOrEqual(new Date(findAllBlogDto.created_after)),
             );
         if (only_mine) where.user = { user_id: user.user_id };
+        if (
+            findAllBlogDto.only_deleted &&
+            ability.cannot(BlogAction.ReadDeletedBlog, Blog)
+        ) {
+            where.deleted_at = Not(IsNull());
+            where.user = { user_id: user.user_id };
+        }
+        if (
+            findAllBlogDto.only_deleted &&
+            ability.can(BlogAction.ReadDeletedBlog, Blog)
+        ) {
+            where.deleted_at = Not(IsNull());
+        }
         return where;
     }
 
@@ -72,8 +87,14 @@ export class BlogsFindAllProvider {
             created_at: true,
             title: true,
             sub_title: true,
-            deleted_at: ability.can(Action.Read, Blog),
+            deleted_at: ability.can(BlogAction.ReadDeletedBlog, Blog),
         };
         return select;
+    }
+
+    GetWithDeleted(findAllBlogDto: FindAllBlogDto): boolean {
+        // if user is admin and only delteted return t
+        // if user is not admin and only delete return t
+        if (findAllBlogDto.only_deleted) return true;
     }
 }
