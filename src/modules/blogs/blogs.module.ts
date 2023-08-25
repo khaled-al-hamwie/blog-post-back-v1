@@ -6,10 +6,16 @@ import { BlogsService } from "./blogs.service";
 import { Blog } from "./entities/blog.entity";
 import { BlogsAbilityFactory } from "./factories/blogs-ability.factory";
 import { BlogsFindAllProvider } from "./providers/blogs.findAll.provider";
+import { BlogsFindOneProvider } from "./providers/blogs.findOne.provider";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Blog]), UsersModule],
     controllers: [BlogsController],
-    providers: [BlogsService, BlogsAbilityFactory, BlogsFindAllProvider],
+    providers: [
+        BlogsService,
+        BlogsAbilityFactory,
+        BlogsFindAllProvider,
+        BlogsFindOneProvider,
+    ],
 })
 export class BlogsModule {}
