@@ -13,8 +13,7 @@ import {
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
-import { FindManyOptions } from "typeorm";
-import { Action } from "../auth/enums/actions.enum";
+import { FindManyOptions, FindOneOptions } from "typeorm";
 import { User } from "../users/entities/user.entity";
 import { BlogsService } from "./blogs.service";
 import { CreateBlogDto } from "./dto/create-blog.dto";
@@ -25,6 +24,7 @@ import { BlogAction } from "./enums/blogs.actions.enum";
 import { BlogNotFoundException } from "./exceptions/BlogNotFound.exception";
 import { BlogsAbilityFactory } from "./factories/blogs-ability.factory";
 import { BlogsFindAllProvider } from "./providers/blogs.findAll.provider";
+import { BlogsFindOneProvider } from "./providers/blogs.findOne.provider";
 
 @UseGuards(LoggedInGuard)
 @Controller("blogs")
@@ -33,6 +33,7 @@ export class BlogsController {
         private readonly blogsService: BlogsService,
         private readonly blogsAbilityFactory: BlogsAbilityFactory,
         private readonly blogsFindAllProvider: BlogsFindAllProvider,
+        private readonly blogsFindOneProvider: BlogsFindOneProvider,
     ) {}
 
     @Post()
@@ -62,32 +63,12 @@ export class BlogsController {
         @Param("id", ParseIntPipe) blog_id: number,
         @UserDecorator() user: User,
     ) {
+        const optons: FindOneOptions<Blog> =
+            this.blogsFindOneProvider.GetOptions(blog_id);
         const ability = this.blogsAbilityFactory.createForUser(user);
-        const blog = await this.blogsService.findOne({
-            where: { blog_id },
-            relations: { user: true },
-            select: {
-                user: {
-                    user_id: true,
-                    user_name: true,
-                    avatar: true,
-                    first_name: true,
-                    last_name: true,
-                },
-                blog_id: true,
-                created_at: true,
-                title: true,
-                sub_title: true,
-                minute_to_read: true,
-                document: true,
-                blog_pic: true,
-                updated_at: true,
-                deleted_at: ability.can(Action.Read, Blog),
-            },
-            withDeleted: ability.can(Action.Read, Blog),
-        });
-        if (!blog) throw new BlogNotFoundException();
-        return blog;
+        const blog = await this.blogsService.findOne(optons);
+        if (blog && ability.can(BlogAction.ReadBlog, blog)) return blog;
+        throw new BlogNotFoundException();
     }
 
     @Patch(":id")
