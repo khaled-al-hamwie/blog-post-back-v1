@@ -91,15 +91,20 @@ export class BlogsController {
     }
 
     @Patch(":id")
-    update(
+    async update(
         @UserDecorator() user: User,
         @Param("id", ParseIntPipe) blog_id: number,
         @Body() updateBlogDto: UpdateBlogDto,
     ) {
         const ability = this.blogsAbilityFactory.createForUser(user);
-        if (ability.can(Action.Update, Blog)) {
-            updateBlogDto.author_id = user.user_id;
-            return this.blogsService.update(blog_id, updateBlogDto);
+        const blog = await this.blogsService.findOne({
+            where: { blog_id },
+            relations: { user: true },
+        });
+        if (!blog) throw new BlogNotFoundException();
+        if (ability.can(BlogAction.UpdateBlog, blog)) {
+            delete updateBlogDto.author_id;
+            return this.blogsService.update(blog, updateBlogDto);
         }
         throw new UnauthorizedException();
     }

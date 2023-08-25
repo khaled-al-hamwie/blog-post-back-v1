@@ -31,12 +31,8 @@ export class BlogsService {
         return this.blogRepositry.findOne(options);
     }
 
-    async update(blog_id: number, updateBlogDto: UpdateBlogDto) {
-        const requiredUser = await this.findOne({
-            where: { user: { user_id: updateBlogDto.author_id }, blog_id },
-        });
-        delete updateBlogDto.author_id;
-        this.blogRepositry.save({ ...requiredUser, ...updateBlogDto });
+    async update(blog: Blog, updateBlogDto: UpdateBlogDto) {
+        this.blogRepositry.save({ ...blog, ...updateBlogDto });
         return { message: "blog has been updated succsesfully" };
     }
 
