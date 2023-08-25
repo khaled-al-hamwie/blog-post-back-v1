@@ -13,6 +13,7 @@ import {
 } from "typeorm";
 import { FindAllBlogDto } from "../dto/find-all-blog.dto";
 import { Blog } from "../entities/blog.entity";
+import { BlogAction } from "../enums/blogs.actions.enum";
 import { BlogsAbilityFactory } from "../factories/blogs-ability.factory";
 
 @Injectable()
@@ -25,7 +26,7 @@ export class BlogsFindAllProvider {
     ): FindManyOptions<Blog> {
         const option: FindManyOptions<Blog> = {};
         const ability = this.blogsAbilityFactory.createForUser(user);
-        option.where = this.GetWhereOptions(findAllBlogDto);
+        option.where = this.GetWhereOptions(findAllBlogDto, ability, user);
         option.select = this.GetSelectOptions(ability);
         option.take = 10;
         option.skip = findAllBlogDto.page ? findAllBlogDto.page * 10 : 0;
@@ -35,8 +36,13 @@ export class BlogsFindAllProvider {
 
     GetWhereOptions(
         findAllBlogDto: FindAllBlogDto,
+        ability: MongoAbility<AbilityTuple, MongoQuery>,
+        user: User,
     ): FindOptionsWhere<Blog> | FindOptionsWhere<Blog>[] {
         const where: FindOptionsWhere<Blog> = {};
+        const only_mine =
+            findAllBlogDto.only_mine &&
+            ability.can(BlogAction.CreateBlog, Blog);
         if (findAllBlogDto.title) where["title"] = Like(findAllBlogDto.title);
         if (findAllBlogDto.user_name)
             where.user = { user_name: findAllBlogDto.user_name };
@@ -53,6 +59,7 @@ export class BlogsFindAllProvider {
                 LessThanOrEqual(new Date(findAllBlogDto.created_before)),
                 MoreThanOrEqual(new Date(findAllBlogDto.created_after)),
             );
+        if (only_mine) where.user = { user_id: user.user_id };
         return where;
     }
 
