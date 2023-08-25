@@ -21,6 +21,7 @@ import { CreateBlogDto } from "./dto/create-blog.dto";
 import { FindAllBlogDto } from "./dto/find-all-blog.dto";
 import { UpdateBlogDto } from "./dto/update-blog.dto";
 import { Blog } from "./entities/blog.entity";
+import { BlogAction } from "./enums/blogs.actions.enum";
 import { BlogNotFoundException } from "./exceptions/BlogNotFound.exception";
 import { BlogsAbilityFactory } from "./factories/blogs-ability.factory";
 import { BlogsFindAllProvider } from "./providers/blogs.findAll.provider";
@@ -37,7 +38,7 @@ export class BlogsController {
     @Post()
     create(@Body() createBlogDto: CreateBlogDto, @UserDecorator() user: User) {
         const ability = this.blogsAbilityFactory.createForUser(user);
-        if (ability.can(Action.Create, Blog)) {
+        if (ability.can(BlogAction.CreateBlog, Blog)) {
             createBlogDto.author_id = user.user_id;
             return this.blogsService.create(createBlogDto);
         }
