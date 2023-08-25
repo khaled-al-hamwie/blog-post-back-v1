@@ -40,4 +40,10 @@ export class FindAllBlogDto {
         message: "you can only provide yes or don't provide an option",
     })
     only_mine: boolean;
+
+    @IsOptional()
+    @IsIn(["yes"], {
+        message: "you can only provide yes or don't provide an option",
+    })
+    only_deleted: boolean;
 }
