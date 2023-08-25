@@ -120,9 +120,7 @@ export class BlogsController {
             relations: { user: true },
         });
         if (!blog) throw new BlogNotFoundException();
-        if (ability.can(Action.Delete, Blog))
-            return this.blogsService.remove(blog);
-        else if (blog.user.user_id == user.user_id)
+        else if (ability.can(BlogAction.DeleteBlog, blog))
             return this.blogsService.remove(blog);
         else throw new UnauthorizedException();
     }
