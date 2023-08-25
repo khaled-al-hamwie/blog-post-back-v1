@@ -45,16 +45,16 @@ export class BlogsController {
         throw new UnauthorizedException();
     }
 
-    // or only mine and only deleted and page option
-    // sort by created at or by most liked
     @Get()
-    findAll(
+    async findAll(
         @UserDecorator() user: User,
         @Query() findAllBlogDto: FindAllBlogDto,
     ) {
         const option: FindManyOptions<Blog> =
             this.blogsFindAllProvider.GetOptions(findAllBlogDto, user);
-        return this.blogsService.findAll(option);
+        const blogs = await this.blogsService.findAll(option);
+        if (blogs.length == 0) throw new BlogNotFoundException();
+        return blogs;
     }
 
     @Get(":id")
