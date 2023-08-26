@@ -54,8 +54,15 @@ export class CommentsService {
     }
 
     async remove(comment: Comment) {
-        console.log(comment);
+        if (comment.replies) await this.removeReplies(comment);
         await this.commnetRepositry.remove(comment);
         return { message: "comment has been deleted" };
+    }
+
+    async removeReplies(comment: Comment) {
+        for (let i = 0; i < comment.replies.length; i++) {
+            const element = comment.replies[i];
+            await this.remove(element);
+        }
     }
 }
