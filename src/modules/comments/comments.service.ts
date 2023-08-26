@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, IsNull, Repository } from "typeorm";
 import { Blog } from "../blogs/entities/blog.entity";
 import { UsersService } from "../users/services/users.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { UpdateCommentDto } from "./dto/update-comment.dto";
 import { Comment } from "./entities/comment.entity";
+import { CommentNotFoundException } from "./exceptions/commnets-notFound.exception";
 
 @Injectable()
 export class CommentsService {
@@ -24,8 +25,18 @@ export class CommentsService {
             },
         });
         comment.blog = blog;
+        if (createCommentDto.comment_id) {
+            const parentComment = await this.findOne({
+                where: {
+                    comment_id: createCommentDto.comment_id,
+                    parent: IsNull(),
+                },
+            });
+            if (!parentComment) throw new CommentNotFoundException();
+            comment.parent = parentComment;
+        }
         this.commnetRepositry.save(comment);
-        return { message: "blog has been added" };
+        return { message: "comment has been added" };
     }
 
     findAll(options: FindManyOptions<Comment>) {

@@ -6,6 +6,7 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -31,4 +32,11 @@ export class Comment {
     @ManyToOne(() => Blog, blog => blog.comments, { nullable: false })
     @JoinColumn({ name: "blog_id" })
     blog: Blog;
+
+    @ManyToOne(() => Comment, comment => comment.replies, { nullable: true })
+    @JoinColumn({ name: "reply_id" })
+    parent: Comment;
+
+    @OneToMany(() => Comment, comment => comment.parent)
+    replies: Comment[];
 }
