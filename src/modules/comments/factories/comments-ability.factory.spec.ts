@@ -4,6 +4,8 @@ import { User } from "src/modules/users/entities/user.entity";
 // import { Blog } from "../entities/blog.entity";
 import { Blog } from "src/modules/blogs/entities/blog.entity";
 import { BlogAction } from "src/modules/blogs/enums/blogs.actions.enum";
+import { Comment } from "../entities/comment.entity";
+import { CommentAction } from "../enums/comments.actions.enum";
 import { CommentsAbilityFactory } from "./comments-ability.factory";
 
 describe("Comments ability factory", () => {
@@ -13,6 +15,8 @@ describe("Comments ability factory", () => {
     let user: User;
     let otherUser: User;
     let userBlog: Blog;
+    let userComment: Comment;
+    let otherComment: Comment;
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [CommentsAbilityFactory],
@@ -53,6 +57,18 @@ describe("Comments ability factory", () => {
         userBlog.sub_title = "sub for user blog";
         userBlog.deleted_at = null;
         userBlog.user = user;
+
+        userComment = new Comment();
+        userComment.user = user;
+        userComment.blog = userBlog;
+        userComment.comment = "this is the user comment";
+        userComment.deleted_at = null;
+
+        otherComment = new Comment();
+        otherComment.user = otherUser;
+        otherComment.blog = userBlog;
+        otherComment.comment = "this is the other user comment";
+        otherComment.deleted_at = null;
     });
 
     it("should be defined", () => {
@@ -75,18 +91,26 @@ describe("Comments ability factory", () => {
                 ability.cannot(BlogAction.CommentBlog, userBlog),
             ).toBeFalsy();
         });
-        // it("allow user to update blog", () => {
-        //     const ability = provider.createForUser(user);
-        //     expect(ability.can(BlogAction.UpdateBlog, Blog)).toBeTruthy();
+        it("allow user to update his comment", () => {
+            const ability = provider.createForUser(user);
+            expect(
+                ability.can(CommentAction.UpdateComment, Comment),
+            ).toBeTruthy();
 
-        //     expect(ability.can(BlogAction.UpdateBlog, userBlog)).toBeTruthy();
-        //     expect(ability.cannot(BlogAction.UpdateBlog, userBlog)).toBeFalsy();
+            expect(
+                ability.can(CommentAction.UpdateComment, userComment),
+            ).toBeTruthy();
+            expect(
+                ability.cannot(CommentAction.UpdateComment, userComment),
+            ).toBeFalsy();
 
-        //     expect(ability.can(BlogAction.UpdateBlog, otherBlog)).toBeFalsy();
-        //     expect(
-        //         ability.cannot(BlogAction.UpdateBlog, otherBlog),
-        //     ).toBeTruthy();
-        // });
+            expect(
+                ability.can(CommentAction.UpdateComment, otherComment),
+            ).toBeFalsy();
+            expect(
+                ability.cannot(CommentAction.UpdateComment, otherComment),
+            ).toBeTruthy();
+        });
 
         // it("allow user to delete blog", () => {
         //     const ability = provider.createForUser(user);
@@ -117,10 +141,12 @@ describe("Comments ability factory", () => {
                 ability.cannot(BlogAction.CommentBlog, userBlog),
             ).toBeTruthy();
         });
-        // it("not allow user to update blog", () => {
-        //     const ability = provider.createForUser(user);
-        //     expect(ability.can(BlogAction.UpdateBlog, Blog)).toBeFalsy();
-        // });
+        it("admin can't update comment", () => {
+            const ability = provider.createForUser(user);
+            expect(
+                ability.can(CommentAction.UpdateComment, Comment),
+            ).toBeFalsy();
+        });
 
         // it("allow admin to delete blog", () => {
         //     const ability = provider.createForUser(user);
