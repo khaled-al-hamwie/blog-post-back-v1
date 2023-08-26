@@ -6,10 +6,15 @@ import { CommentsController } from "./comments.controller";
 import { CommentsService } from "./comments.service";
 import { Comment } from "./entities/comment.entity";
 import { CommentsAbilityFactory } from "./factories/comments-ability.factory";
+import { CommentsFindAllProvider } from "./providers/comments.findAll.provider";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Comment]), BlogsModule, UsersModule],
     controllers: [CommentsController],
-    providers: [CommentsService, CommentsAbilityFactory],
+    providers: [
+        CommentsService,
+        CommentsAbilityFactory,
+        CommentsFindAllProvider,
+    ],
 })
 export class CommentsModule {}

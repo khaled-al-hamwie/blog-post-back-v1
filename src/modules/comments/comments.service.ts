@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindManyOptions, Repository } from "typeorm";
 import { Blog } from "../blogs/entities/blog.entity";
 import { UsersService } from "../users/services/users.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
@@ -28,8 +28,8 @@ export class CommentsService {
         return { message: "blog has been added" };
     }
 
-    findAll() {
-        return `This action returns all comments`;
+    findAll(options: FindManyOptions<Comment>) {
+        return this.commnetRepositry.find(options);
     }
 
     findOne(id: number) {
