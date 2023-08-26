@@ -14,6 +14,20 @@ export class CommentsFindAllProvider {
         options.take = 40;
         options.skip = page ? page * 40 : 0;
         options.order = this.GetOrder(sort);
+        options.relations = { user: true };
+        options.select = {
+            comment: true,
+            comment_id: true,
+            created_at: true,
+            updated_at: true,
+            user: {
+                avatar: true,
+                user_id: true,
+                user_name: true,
+                first_name: true,
+                last_name: true,
+            },
+        };
         return options;
     }
 
