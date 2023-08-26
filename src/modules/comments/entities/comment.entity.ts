@@ -3,7 +3,6 @@ import { User } from "src/modules/users/entities/user.entity";
 import {
     Column,
     CreateDateColumn,
-    DeleteDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
@@ -24,9 +23,6 @@ export class Comment {
 
     @UpdateDateColumn()
     updated_at: Date;
-
-    @DeleteDateColumn()
-    deleted_at: Date;
 
     @ManyToOne(() => User, user => user.comments, { nullable: false })
     @JoinColumn({ name: "user_id" })
