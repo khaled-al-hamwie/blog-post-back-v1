@@ -17,14 +17,23 @@ export class CommentsAbilityFactory {
         if (user.role.name == "admin" || user.role.name == "super admin") {
             cannot(BlogAction.CommentBlog, Blog);
             cannot(CommentAction.UpdateComment, Comment);
+            can(CommentAction.DeleteComment, Comment);
         } else {
             can(BlogAction.CommentBlog, Blog);
+
             can(CommentAction.UpdateComment, Comment);
             can(CommentAction.UpdateComment, Comment, {
                 "user.user_id": user.user_id,
             } as any);
             cannot(CommentAction.UpdateComment, Comment, {
                 "user.user_id": { $ne: user.user_id },
+            } as any);
+
+            can(CommentAction.DeleteComment, Comment, {
+                "user.user_id": user.user_id,
+            } as any);
+            can(CommentAction.DeleteComment, Comment, {
+                "blog.user.user_id": user.user_id,
             } as any);
         }
         return build({

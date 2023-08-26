@@ -14,9 +14,11 @@ describe("Comments ability factory", () => {
     let adminRole: Role;
     let user: User;
     let otherUser: User;
+    let thirdUser: User;
     let userBlog: Blog;
     let userComment: Comment;
     let otherComment: Comment;
+    let thirdComment: Comment;
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [CommentsAbilityFactory],
@@ -49,6 +51,14 @@ describe("Comments ability factory", () => {
         otherUser.user_name = "@khaled2";
         otherUser.role = defaultRole;
 
+        thirdUser = new User();
+        thirdUser.user_id = 3;
+        thirdUser.first_name = "khaled";
+        thirdUser.last_name = "khaled";
+        thirdUser.password = "12,3";
+        thirdUser.user_name = "@khaled3";
+        thirdUser.role = defaultRole;
+
         userBlog = new Blog();
         userBlog.blog_id = 1;
         userBlog.document = "bla bla ";
@@ -69,6 +79,12 @@ describe("Comments ability factory", () => {
         otherComment.blog = userBlog;
         otherComment.comment = "this is the other user comment";
         otherComment.deleted_at = null;
+
+        thirdComment = new Comment();
+        thirdComment.user = thirdUser;
+        thirdComment.blog = userBlog;
+        thirdComment.comment = "this is the third user comment";
+        thirdComment.deleted_at = null;
     });
 
     it("should be defined", () => {
@@ -112,18 +128,49 @@ describe("Comments ability factory", () => {
             ).toBeTruthy();
         });
 
-        // it("allow user to delete blog", () => {
-        //     const ability = provider.createForUser(user);
-        //     expect(ability.can(BlogAction.DeleteBlog, Blog)).toBeTruthy();
+        it("allow user to delete his comment", () => {
+            const ability = provider.createForUser(user);
+            expect(
+                ability.can(CommentAction.DeleteComment, Comment),
+            ).toBeTruthy();
 
-        //     expect(ability.can(BlogAction.DeleteBlog, userBlog)).toBeTruthy();
-        //     expect(ability.cannot(BlogAction.DeleteBlog, userBlog)).toBeFalsy();
+            expect(
+                ability.can(CommentAction.DeleteComment, userComment),
+            ).toBeTruthy();
+            expect(
+                ability.cannot(CommentAction.DeleteComment, userComment),
+            ).toBeFalsy();
+        });
+        it("user can't delete other comment", () => {
+            const ability = provider.createForUser(otherUser);
+            expect(
+                ability.can(CommentAction.DeleteComment, Comment),
+            ).toBeTruthy();
+            expect(
+                ability.can(CommentAction.DeleteComment, userComment),
+            ).toBeFalsy();
+            expect(
+                ability.cannot(CommentAction.DeleteComment, userComment),
+            ).toBeTruthy();
 
-        //     expect(ability.can(BlogAction.DeleteBlog, otherBlog)).toBeFalsy();
-        //     expect(
-        //         ability.cannot(BlogAction.DeleteBlog, otherBlog),
-        //     ).toBeTruthy();
-        // });
+            expect(
+                ability.can(CommentAction.DeleteComment, thirdComment),
+            ).toBeFalsy();
+            expect(
+                ability.cannot(CommentAction.DeleteComment, thirdComment),
+            ).toBeTruthy();
+        });
+
+        it("author can delete other comment", () => {
+            const ability = provider.createForUser(user);
+
+            expect(
+                ability.can(CommentAction.DeleteComment, otherComment),
+            ).toBeTruthy();
+            expect(
+                ability.cannot(CommentAction.DeleteComment, otherComment),
+            ).toBeFalsy();
+        });
     });
 
     describe("admin", () => {
@@ -148,17 +195,18 @@ describe("Comments ability factory", () => {
             ).toBeFalsy();
         });
 
-        // it("allow admin to delete blog", () => {
-        //     const ability = provider.createForUser(user);
-        //     expect(ability.can(BlogAction.DeleteBlog, Blog)).toBeTruthy();
+        it("admin can delete comment", () => {
+            const ability = provider.createForUser(user);
+            expect(
+                ability.can(CommentAction.DeleteComment, Comment),
+            ).toBeTruthy();
 
-        //     expect(ability.can(BlogAction.DeleteBlog, userBlog)).toBeTruthy();
-        //     expect(ability.cannot(BlogAction.DeleteBlog, userBlog)).toBeFalsy();
-
-        //     expect(ability.can(BlogAction.DeleteBlog, otherBlog)).toBeTruthy();
-        //     expect(
-        //         ability.cannot(BlogAction.DeleteBlog, otherBlog),
-        //     ).toBeFalsy();
-        // });
+            expect(
+                ability.can(CommentAction.DeleteComment, userComment),
+            ).toBeTruthy();
+            expect(
+                ability.cannot(CommentAction.DeleteComment, userComment),
+            ).toBeFalsy();
+        });
     });
 });
