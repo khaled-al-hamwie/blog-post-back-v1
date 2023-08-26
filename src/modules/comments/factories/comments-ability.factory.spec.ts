@@ -72,19 +72,16 @@ describe("Comments ability factory", () => {
         userComment.user = user;
         userComment.blog = userBlog;
         userComment.comment = "this is the user comment";
-        userComment.deleted_at = null;
 
         otherComment = new Comment();
         otherComment.user = otherUser;
         otherComment.blog = userBlog;
         otherComment.comment = "this is the other user comment";
-        otherComment.deleted_at = null;
 
         thirdComment = new Comment();
         thirdComment.user = thirdUser;
         thirdComment.blog = userBlog;
         thirdComment.comment = "this is the third user comment";
-        thirdComment.deleted_at = null;
     });
 
     it("should be defined", () => {
