@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindManyOptions, Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import { Blog } from "../blogs/entities/blog.entity";
 import { UsersService } from "../users/services/users.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
@@ -32,12 +32,14 @@ export class CommentsService {
         return this.commnetRepositry.find(options);
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} comment`;
+    findOne(options: FindOneOptions<Comment>) {
+        return this.commnetRepositry.findOne(options);
     }
 
-    update(id: number, updateCommentDto: UpdateCommentDto) {
-        return `This action updates a #${id} comment`;
+    update(comment: Comment, updateCommentDto: UpdateCommentDto) {
+        if (updateCommentDto.user_id) delete updateCommentDto.user_id;
+        this.commnetRepositry.save({ ...comment, ...updateCommentDto });
+        return { message: "comment has been updated" };
     }
 
     remove(id: number) {

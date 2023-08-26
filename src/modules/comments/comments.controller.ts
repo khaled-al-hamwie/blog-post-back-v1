@@ -21,6 +21,7 @@ import { CommentsService } from "./comments.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { FindAllCommentsDto } from "./dto/findAll-comment.dto";
 import { UpdateCommentDto } from "./dto/update-comment.dto";
+import { CommentAction } from "./enums/comments.actions.enum";
 import { CommentNotFoundException } from "./exceptions/commnets-notFound.exception";
 import { CommentsAbilityFactory } from "./factories/comments-ability.factory";
 import { CommentsFindAllProvider } from "./providers/comments.findAll.provider";
@@ -51,7 +52,6 @@ export class CommentsController {
         throw new UnauthorizedException();
     }
 
-    // sort by created_at , oldest newest , and most liked
     @Get(":blog_id")
     async findAll(
         @Param("blog_id", ParseIntPipe) blog_id: number,
@@ -68,12 +68,21 @@ export class CommentsController {
         return comments;
     }
 
-    @Patch(":id")
-    update(
-        @Param("id") id: string,
+    @Patch(":comment_id")
+    async update(
+        @Param("comment_id", ParseIntPipe) comment_id: number,
         @Body() updateCommentDto: UpdateCommentDto,
+        @UserDecorator() user: User,
     ) {
-        return this.commentsService.update(+id, updateCommentDto);
+        const comment = await this.commentsService.findOne({
+            where: { comment_id },
+            relations: { user: true },
+        });
+        if (!comment) throw new CommentNotFoundException();
+        const ability = this.commentsAbilityFactory.createForUser(user);
+        if (ability.can(CommentAction.UpdateComment, comment))
+            return this.commentsService.update(comment, updateCommentDto);
+        throw new UnauthorizedException();
     }
 
     @Delete(":id")
