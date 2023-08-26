@@ -42,7 +42,9 @@ export class CommentsService {
         return { message: "comment has been updated" };
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} comment`;
+    async remove(comment: Comment) {
+        console.log(comment);
+        await this.commnetRepositry.remove(comment);
+        return { message: "comment has been deleted" };
     }
 }

@@ -85,8 +85,19 @@ export class CommentsController {
         throw new UnauthorizedException();
     }
 
-    @Delete(":id")
-    remove(@Param("id") id: string) {
-        return this.commentsService.remove(+id);
+    @Delete(":comment_id")
+    async remove(
+        @Param("comment_id", ParseIntPipe) comment_id: number,
+        @UserDecorator() user: User,
+    ) {
+        const comment = await this.commentsService.findOne({
+            where: { comment_id },
+            relations: { user: true, blog: { user: true } },
+        });
+        if (!comment) throw new CommentNotFoundException();
+        const ability = this.commentsAbilityFactory.createForUser(user);
+        if (ability.can(CommentAction.DeleteComment, comment))
+            return this.commentsService.remove(comment);
+        throw new UnauthorizedException();
     }
 }
