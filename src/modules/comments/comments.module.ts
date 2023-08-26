@@ -7,6 +7,7 @@ import { CommentsService } from "./comments.service";
 import { Comment } from "./entities/comment.entity";
 import { CommentsAbilityFactory } from "./factories/comments-ability.factory";
 import { CommentsFindAllProvider } from "./providers/comments.findAll.provider";
+import { CommentsGetReplyProvider } from "./providers/comments.getReply.provider";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Comment]), BlogsModule, UsersModule],
@@ -15,6 +16,7 @@ import { CommentsFindAllProvider } from "./providers/comments.findAll.provider";
         CommentsService,
         CommentsAbilityFactory,
         CommentsFindAllProvider,
+        CommentsGetReplyProvider,
     ],
 })
 export class CommentsModule {}

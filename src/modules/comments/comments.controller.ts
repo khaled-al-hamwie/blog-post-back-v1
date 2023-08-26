@@ -25,6 +25,7 @@ import { CommentAction } from "./enums/comments.actions.enum";
 import { CommentNotFoundException } from "./exceptions/commnets-notFound.exception";
 import { CommentsAbilityFactory } from "./factories/comments-ability.factory";
 import { CommentsFindAllProvider } from "./providers/comments.findAll.provider";
+import { CommentsGetReplyProvider } from "./providers/comments.getReply.provider";
 
 @UseGuards(LoggedInGuard)
 @Controller("comments")
@@ -33,6 +34,7 @@ export class CommentsController {
         private readonly commentsService: CommentsService,
         private readonly commentsAbilityFactory: CommentsAbilityFactory,
         private readonly commentsFindAllProvider: CommentsFindAllProvider,
+        private readonly commentsGetReplyProvider: CommentsGetReplyProvider,
         private readonly blogsService: BlogsService,
     ) {}
 
@@ -50,6 +52,14 @@ export class CommentsController {
             return this.commentsService.create(createCommentDto, blog);
         }
         throw new UnauthorizedException();
+    }
+
+    @Get("replies/:comment_id")
+    async getReply(@Param("comment_id", ParseIntPipe) comment_id: number) {
+        const option = this.commentsGetReplyProvider.GetOption(comment_id);
+        const comment = await this.commentsService.findOne(option);
+        if (!comment) throw new CommentNotFoundException();
+        return comment;
     }
 
     @Get(":blog_id")
