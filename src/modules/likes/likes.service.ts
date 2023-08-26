@@ -27,7 +27,24 @@ export class LikesService {
         return this.likeRepositry.findOne(options);
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} like`;
+    async isLiked(blog_id: number, user_id: number): Promise<boolean> {
+        return (await this.findOne({
+            where: { blog: { blog_id }, user: { user_id } },
+        }))
+            ? true
+            : false;
+    }
+
+    likeCount(blog_id: number) {
+        return this.likeRepositry
+            .createQueryBuilder("like")
+            .where("like.blog = :blog_id", { blog_id })
+            .loadRelationCountAndMap("likeCount", "like.blog")
+            .getCount();
+    }
+
+    remove(like: Like) {
+        this.likeRepositry.delete(like);
+        return { message: "liked has been removed" };
     }
 }
