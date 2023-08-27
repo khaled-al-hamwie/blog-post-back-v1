@@ -3,12 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { FindOneOptions, Repository } from "typeorm";
 import { Blog } from "../blogs/entities/blog.entity";
 import { UsersService } from "../users/services/users.service";
-import { Like } from "./entities/like.entity";
+import { BlogLike } from "./entities/blog-like.entity";
 
 @Injectable()
 export class LikesService {
     constructor(
-        @InjectRepository(Like) private likeRepositry: Repository<Like>,
+        @InjectRepository(BlogLike) private likeRepositry: Repository<BlogLike>,
         private readonly usersService: UsersService,
     ) {}
     async create(blog: Blog, user_id: number) {
@@ -23,7 +23,7 @@ export class LikesService {
         return { message: "like has been added" };
     }
 
-    findOne(options: FindOneOptions<Like>) {
+    findOne(options: FindOneOptions<BlogLike>) {
         return this.likeRepositry.findOne(options);
     }
 
@@ -43,7 +43,7 @@ export class LikesService {
             .getCount();
     }
 
-    remove(like: Like) {
+    remove(like: BlogLike) {
         this.likeRepositry.delete(like);
         return { message: "liked has been removed" };
     }

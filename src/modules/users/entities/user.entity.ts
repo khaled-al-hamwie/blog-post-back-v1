@@ -1,6 +1,6 @@
 import { Blog } from "src/modules/blogs/entities/blog.entity";
 import { Comment } from "src/modules/comments/entities/comment.entity";
-import { Like } from "src/modules/likes/entities/like.entity";
+import { BlogLike } from "src/modules/likes/entities/blog-like.entity";
 import { Role } from "src/modules/roles/entities/role.entity";
 import {
     Column,
@@ -45,8 +45,8 @@ export class User {
     @OneToMany(() => Blog, blog => blog.user)
     blogs: Blog[];
 
-    @OneToMany(() => Like, like => like.user)
-    likes: Like[];
+    @OneToMany(() => BlogLike, like => like.user)
+    blog_likes: BlogLike[];
 
     @OneToMany(() => Comment, comment => comment.user)
     comments: Comment[];

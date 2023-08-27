@@ -13,7 +13,7 @@ import { BlogsService } from "../blogs/blogs.service";
 import { BlogAction } from "../blogs/enums/blogs.actions.enum";
 import { BlogNotFoundException } from "../blogs/exceptions/BlogNotFound.exception";
 import { User } from "../users/entities/user.entity";
-import { Like } from "./entities/like.entity";
+import { BlogLike } from "./entities/blog-like.entity";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { likesAbilityFactory } from "./factories/like-ability.factory";
 import { LikesService } from "./likes.service";
@@ -37,7 +37,7 @@ export class LikesController {
         const ability = this.likesAbilityFactory.createForUser(user);
         if (ability.cannot(BlogAction.LikeBlog, blog))
             throw new UnauthorizedException();
-        const likedBlog: Like = await this.likesService.findOne({
+        const likedBlog: BlogLike = await this.likesService.findOne({
             where: { blog: { blog_id }, user: { user_id: user.user_id } },
         });
         if (likedBlog) return this.likesService.remove(likedBlog);

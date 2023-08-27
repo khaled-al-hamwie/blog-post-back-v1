@@ -7,7 +7,7 @@ import { Injectable } from "@nestjs/common";
 import { Blog } from "src/modules/blogs/entities/blog.entity";
 import { BlogAction } from "src/modules/blogs/enums/blogs.actions.enum";
 import { User } from "src/modules/users/entities/user.entity";
-import { Like } from "../entities/like.entity";
+import { BlogLike } from "../entities/blog-like.entity";
 
 @Injectable()
 export class likesAbilityFactory {
@@ -20,7 +20,7 @@ export class likesAbilityFactory {
         }
         return build({
             detectSubjectType: item =>
-                item.constructor as ExtractSubjectType<typeof Like>,
+                item.constructor as ExtractSubjectType<typeof BlogLike>,
         });
     }
 }

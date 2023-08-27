@@ -1,5 +1,5 @@
 import { Comment } from "src/modules/comments/entities/comment.entity";
-import { Like } from "src/modules/likes/entities/like.entity";
+import { BlogLike } from "src/modules/likes/entities/blog-like.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import {
     Column,
@@ -46,8 +46,8 @@ export class Blog {
     @JoinColumn({ name: "author_id" })
     user: User;
 
-    @OneToMany(() => Like, like => like.blog)
-    likes: Like[];
+    @OneToMany(() => BlogLike, like => like.blog)
+    blog_likes: BlogLike[];
 
     @OneToMany(() => Comment, comment => comment.blog)
     comments: Comment[];
