@@ -38,9 +38,9 @@ export class CommentLikesService {
 
     likeCount(commnet_id: number) {
         return this.likeRepositry
-            .createQueryBuilder("like")
-            .where("like.blog = :blog_id", { commnet_id })
-            .loadRelationCountAndMap("likeCount", "like.blog")
+            .createQueryBuilder("comment_like")
+            .where("comment_like.comment = :commnet_id", { commnet_id })
+            .loadRelationCountAndMap("likeCount", "comment_like.comment")
             .getCount();
     }
 

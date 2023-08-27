@@ -9,16 +9,13 @@ import {
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
-import { BlogAction } from "../../blogs/enums/blogs.actions.enum";
-import { BlogNotFoundException } from "../../blogs/exceptions/BlogNotFound.exception";
-import { User } from "../../users/entities/user.entity";
-import { BlogLike } from "../entities/blog-like.entity";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CommentsService } from "src/modules/comments/comments.service";
 import { CommentAction } from "src/modules/comments/enums/comments.actions.enum";
+import { BlogNotFoundException } from "../../blogs/exceptions/BlogNotFound.exception";
+import { User } from "../../users/entities/user.entity";
 import { CommentLike } from "../entities/comment-like.entity";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { likesAbilityFactory } from "../factories/like-ability.factory";
-import { BlogLikesService } from "../providers/blog-likes.service";
 import { CommentLikesService } from "../providers/comment-likes.service";
 
 @UseGuards(LoggedInGuard)
@@ -49,13 +46,13 @@ export class CommentLikesController {
         return this.likesService.create(comment, user.user_id);
     }
 
-    // @Get(":blog_id")
-    // async getLikes(
-    //     @Param("blog_id", ParseIntPipe) blog_id: number,
-    //     @UserDecorator("user_id") user_id: number,
-    // ) {
-    //     const isLiked = await this.likesService.isLiked(blog_id, user_id);
-    //     const likeCount = await this.likesService.likeCount(blog_id);
-    //     return { is_liked: isLiked, like_count: likeCount };
-    // }
+    @Get(":comment_id")
+    async getLikes(
+        @Param("comment_id", ParseIntPipe) comment_id: number,
+        @UserDecorator("user_id") user_id: number,
+    ) {
+        const isLiked = await this.likesService.isLiked(comment_id, user_id);
+        const likeCount = await this.likesService.likeCount(comment_id);
+        return { is_liked: isLiked, like_count: likeCount };
+    }
 }
