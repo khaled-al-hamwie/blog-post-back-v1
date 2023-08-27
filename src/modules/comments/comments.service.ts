@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindManyOptions, FindOneOptions, IsNull, Repository } from "typeorm";
 import { Blog } from "../blogs/entities/blog.entity";
+import { CommentLikesService } from "../likes/providers/comment-likes.service";
 import { UsersService } from "../users/services/users.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { UpdateCommentDto } from "./dto/update-comment.dto";
@@ -14,6 +15,7 @@ export class CommentsService {
         @InjectRepository(Comment)
         private commnetRepositry: Repository<Comment>,
         private readonly usersService: UsersService,
+        private readonly commentLikesService: CommentLikesService,
     ) {}
     async create(createCommentDto: CreateCommentDto, blog: Blog) {
         const comment = this.commnetRepositry.create({
@@ -54,6 +56,7 @@ export class CommentsService {
     }
 
     async remove(comment: Comment) {
+        if (comment.comment_likes) await this.removeLikes(comment);
         if (comment.replies) await this.removeReplies(comment);
         await this.commnetRepositry.remove(comment);
         return { message: "comment has been deleted" };
@@ -63,6 +66,16 @@ export class CommentsService {
         for (let i = 0; i < comment.replies.length; i++) {
             const element = comment.replies[i];
             await this.remove(element);
+        }
+    }
+
+    async removeLikes(comment: Comment) {
+        if (comment.comment_likes) {
+            for (let i = 0; i < comment.comment_likes.length; i++) {
+                const like = comment.comment_likes[i];
+                this.commentLikesService.remove(like);
+                // console.log(like);
+            }
         }
     }
 }

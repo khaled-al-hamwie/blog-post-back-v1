@@ -1,6 +1,7 @@
-import { Module } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { BlogsModule } from "../blogs/blogs.module";
+import { LikesModule } from "../likes/likes.module";
 import { UsersModule } from "../users/users.module";
 import { CommentsController } from "./comments.controller";
 import { CommentsService } from "./comments.service";
@@ -10,7 +11,12 @@ import { CommentsFindAllProvider } from "./providers/comments.findAll.provider";
 import { CommentsGetReplyProvider } from "./providers/comments.getReply.provider";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Comment]), BlogsModule, UsersModule],
+    imports: [
+        TypeOrmModule.forFeature([Comment]),
+        BlogsModule,
+        UsersModule,
+        forwardRef(() => LikesModule),
+    ],
     controllers: [CommentsController],
     providers: [
         CommentsService,

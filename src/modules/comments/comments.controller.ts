@@ -102,7 +102,12 @@ export class CommentsController {
     ) {
         const comment = await this.commentsService.findOne({
             where: { comment_id },
-            relations: { user: true, blog: { user: true }, replies: true },
+            relations: {
+                user: true,
+                blog: { user: true },
+                replies: true,
+                comment_likes: true,
+            },
         });
         if (!comment) throw new CommentNotFoundException();
         const ability = this.commentsAbilityFactory.createForUser(user);
