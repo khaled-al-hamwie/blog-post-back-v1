@@ -1,4 +1,5 @@
 import { Blog } from "src/modules/blogs/entities/blog.entity";
+import { CommentLike } from "src/modules/likes/entities/comment-like.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import {
     Column,
@@ -39,4 +40,7 @@ export class Comment {
 
     @OneToMany(() => Comment, comment => comment.parent)
     replies: Comment[];
+
+    @OneToMany(() => CommentLike, like => like.comment)
+    comment_likes: CommentLike[];
 }
