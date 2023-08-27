@@ -18,5 +18,6 @@ import { CommentsGetReplyProvider } from "./providers/comments.getReply.provider
         CommentsFindAllProvider,
         CommentsGetReplyProvider,
     ],
+    exports: [CommentsService],
 })
 export class CommentsModule {}
