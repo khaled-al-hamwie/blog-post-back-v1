@@ -16,13 +16,13 @@ import { User } from "../../users/entities/user.entity";
 import { BlogLike } from "../entities/blog-like.entity";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { likesAbilityFactory } from "../factories/like-ability.factory";
-import { LikesService } from "../likes.service";
+import { BlogLikesService } from "../providers/blog-likes.service";
 
 @UseGuards(LoggedInGuard)
 @Controller("likes/blogs")
 export class BlogLikesController {
     constructor(
-        private readonly likesService: LikesService,
+        private readonly likesService: BlogLikesService,
         private readonly blogsService: BlogsService,
         private readonly likesAbilityFactory: likesAbilityFactory,
     ) {}

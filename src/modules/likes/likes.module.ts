@@ -8,7 +8,7 @@ import { CommentLikesController } from "./controllers/comment-likes.controller";
 import { BlogLike } from "./entities/blog-like.entity";
 import { CommentLike } from "./entities/comment-like.entity";
 import { likesAbilityFactory } from "./factories/like-ability.factory";
-import { LikesService } from "./likes.service";
+import { BlogLikesService } from "./providers/blog-likes.service";
 
 @Module({
     imports: [
@@ -18,6 +18,6 @@ import { LikesService } from "./likes.service";
         UsersModule,
     ],
     controllers: [BlogLikesController, CommentLikesController],
-    providers: [LikesService, likesAbilityFactory],
+    providers: [BlogLikesService, likesAbilityFactory],
 })
 export class LikesModule {}

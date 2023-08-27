@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindOneOptions, Repository } from "typeorm";
-import { Blog } from "../blogs/entities/blog.entity";
-import { UsersService } from "../users/services/users.service";
-import { BlogLike } from "./entities/blog-like.entity";
+import { Blog } from "../../blogs/entities/blog.entity";
+import { UsersService } from "../../users/services/users.service";
+import { BlogLike } from "../entities/blog-like.entity";
 
 @Injectable()
-export class LikesService {
+export class BlogLikesService {
     constructor(
         @InjectRepository(BlogLike) private likeRepositry: Repository<BlogLike>,
         private readonly usersService: UsersService,

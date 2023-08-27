@@ -18,14 +18,14 @@ import { CommentsService } from "src/modules/comments/comments.service";
 import { CommentAction } from "src/modules/comments/enums/comments.actions.enum";
 import { CommentLike } from "../entities/comment-like.entity";
 import { likesAbilityFactory } from "../factories/like-ability.factory";
-import { LikesService } from "../likes.service";
+import { BlogLikesService } from "../providers/blog-likes.service";
 
 @UseGuards(LoggedInGuard)
 @Controller("likes/comments")
 export class CommentLikesController {
     constructor(
         private readonly commentsService: CommentsService,
-        private readonly likesService: LikesService,
+        private readonly likesService: BlogLikesService,
         private readonly likesAbilityFactory: likesAbilityFactory,
     ) {}
 
