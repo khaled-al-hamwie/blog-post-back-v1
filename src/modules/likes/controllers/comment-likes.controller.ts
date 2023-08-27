@@ -19,13 +19,14 @@ import { CommentAction } from "src/modules/comments/enums/comments.actions.enum"
 import { CommentLike } from "../entities/comment-like.entity";
 import { likesAbilityFactory } from "../factories/like-ability.factory";
 import { BlogLikesService } from "../providers/blog-likes.service";
+import { CommentLikesService } from "../providers/comment-likes.service";
 
 @UseGuards(LoggedInGuard)
 @Controller("likes/comments")
 export class CommentLikesController {
     constructor(
         private readonly commentsService: CommentsService,
-        private readonly likesService: BlogLikesService,
+        private readonly likesService: CommentLikesService,
         private readonly likesAbilityFactory: likesAbilityFactory,
     ) {}
 
@@ -34,17 +35,18 @@ export class CommentLikesController {
         @Param("comment_id", ParseIntPipe) comment_id: number,
         @UserDecorator() user: User,
     ) {
-        return "hi";
-        // const comment = await this.commentsService.findOne({ where: { comment_id } });
-        // if (!comment) throw new BlogNotFoundException();
-        // const ability = this.likesAbilityFactory.createForUser(user);
-        // if (ability.cannot(CommentAction.LikeComment, comment))
-        //     throw new UnauthorizedException();
-        // const likedComment: CommentLike = await this.likesService.findOne({
-        //     where: { blog: { blog_id: comment_id }, user: { user_id: user.user_id } },
-        // });
-        // if (likedComment) return this.likesService.remove(likedBlog);
-        // return this.likesService.create(comment, user.user_id);
+        const comment = await this.commentsService.findOne({
+            where: { comment_id },
+        });
+        if (!comment) throw new BlogNotFoundException();
+        const ability = this.likesAbilityFactory.createForUser(user);
+        if (ability.cannot(CommentAction.LikeComment, comment))
+            throw new UnauthorizedException();
+        const likedComment: CommentLike = await this.likesService.findOne({
+            where: { comment: { comment_id }, user: { user_id: user.user_id } },
+        });
+        if (likedComment) return this.likesService.remove(likedComment);
+        return this.likesService.create(comment, user.user_id);
     }
 
     // @Get(":blog_id")
