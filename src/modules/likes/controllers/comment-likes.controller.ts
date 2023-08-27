@@ -1,6 +1,5 @@
 import {
     Controller,
-    Get,
     Param,
     ParseIntPipe,
     Put,
@@ -44,15 +43,5 @@ export class CommentLikesController {
         });
         if (likedComment) return this.likesService.remove(likedComment);
         return this.likesService.create(comment, user.user_id);
-    }
-
-    @Get(":comment_id")
-    async getLikes(
-        @Param("comment_id", ParseIntPipe) comment_id: number,
-        @UserDecorator("user_id") user_id: number,
-    ) {
-        const isLiked = await this.likesService.isLiked(comment_id, user_id);
-        const likeCount = await this.likesService.likeCount(comment_id);
-        return { is_liked: isLiked, like_count: likeCount };
     }
 }

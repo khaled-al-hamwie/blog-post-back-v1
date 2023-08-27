@@ -66,16 +66,15 @@ export class CommentsController {
     async findAll(
         @Param("blog_id", ParseIntPipe) blog_id: number,
         @Query() findAllCommentsDto: FindAllCommentsDto,
+        @UserDecorator("user_id") user_id: number,
     ) {
         const blog = await this.blogsService.findOne({ where: { blog_id } });
         if (!blog) throw new BlogNotFoundException();
-        const option = this.commentsFindAllProvider.GetOption(
+        return this.commentsFindAllProvider.provideComments(
+            blog,
             findAllCommentsDto,
-            blog_id,
+            user_id,
         );
-        const comments = await this.commentsService.findAll(option);
-        if (comments.length == 0) throw new CommentNotFoundException();
-        return comments;
     }
 
     @Patch(":comment_id")

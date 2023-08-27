@@ -1,10 +1,18 @@
 import { Injectable } from "@nestjs/common";
+import { Blog } from "src/modules/blogs/entities/blog.entity";
+import { CommentLikesService } from "src/modules/likes/providers/comment-likes.service";
 import { FindManyOptions, FindOptionsOrder } from "typeorm";
+import { CommentsService } from "../comments.service";
 import { FindAllCommentsDto } from "../dto/findAll-comment.dto";
 import { Comment } from "../entities/comment.entity";
+import { CommentNotFoundException } from "../exceptions/commnets-notFound.exception";
 
 @Injectable()
 export class CommentsFindAllProvider {
+    constructor(
+        private readonly commentsService: CommentsService,
+        private readonly commentLikesService: CommentLikesService,
+    ) {}
     GetOption(
         { page, sort }: FindAllCommentsDto,
         blog_id: number,
@@ -37,5 +45,30 @@ export class CommentsFindAllProvider {
         else if (sort == "newest") order = { created_at: "DESC" };
         else order = { created_at: "DESC" };
         return order;
+    }
+
+    async provideComments(
+        blog: Blog,
+        findAllCommentsDto: FindAllCommentsDto,
+        user_id: number,
+    ) {
+        const option = this.GetOption(findAllCommentsDto, blog.blog_id);
+        const comments = await this.commentsService.findAll(option);
+        if (comments.length == 0) throw new CommentNotFoundException();
+        const commentsWihtLikes = [];
+        for (let i = 0; i < comments.length; i++) {
+            const element = comments[i];
+            commentsWihtLikes.push({
+                comment: element,
+                is_liked: await this.commentLikesService.isLiked(
+                    element.comment_id,
+                    user_id,
+                ),
+                like_count: await this.commentLikesService.likeCount(
+                    element.comment_id,
+                ),
+            });
+        }
+        return commentsWihtLikes;
     }
 }
