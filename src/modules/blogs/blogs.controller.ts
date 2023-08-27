@@ -14,7 +14,6 @@ import {
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
 import { FindManyOptions, FindOneOptions } from "typeorm";
-import { BlogLikesService } from "../likes/providers/blog-likes.service";
 import { User } from "../users/entities/user.entity";
 import { BlogsService } from "./blogs.service";
 import { CreateBlogDto } from "./dto/create-blog.dto";
@@ -35,7 +34,6 @@ export class BlogsController {
         private readonly blogsAbilityFactory: BlogsAbilityFactory,
         private readonly blogsFindAllProvider: BlogsFindAllProvider,
         private readonly blogsFindOneProvider: BlogsFindOneProvider,
-        private readonly blogLikesService: BlogLikesService,
     ) {}
 
     @Post()
@@ -72,7 +70,8 @@ export class BlogsController {
             this.blogsFindOneProvider.GetOptions(blog_id);
         const ability = this.blogsAbilityFactory.createForUser(user);
         const blog = await this.blogsService.findOne(optons);
-        if (blog && ability.can(BlogAction.ReadBlog, blog)) return blog;
+        if (blog && ability.can(BlogAction.ReadBlog, blog))
+            return this.blogsFindOneProvider.provideLikes(blog, user.user_id);
         throw new BlogNotFoundException();
     }
 
