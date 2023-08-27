@@ -13,7 +13,7 @@ import { CommentsGetReplyProvider } from "./providers/comments.getReply.provider
 @Module({
     imports: [
         TypeOrmModule.forFeature([Comment]),
-        BlogsModule,
+        forwardRef(() => BlogsModule),
         UsersModule,
         forwardRef(() => LikesModule),
     ],

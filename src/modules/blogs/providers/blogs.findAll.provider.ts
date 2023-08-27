@@ -1,5 +1,6 @@
 import { AbilityTuple, MongoAbility, MongoQuery } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
+import { BlogLikesService } from "src/modules/likes/providers/blog-likes.service";
 import { User } from "src/modules/users/entities/user.entity";
 import {
     And,
@@ -19,7 +20,10 @@ import { BlogsAbilityFactory } from "../factories/blogs-ability.factory";
 
 @Injectable()
 export class BlogsFindAllProvider {
-    constructor(private readonly blogsAbilityFactory: BlogsAbilityFactory) {}
+    constructor(
+        private readonly blogsAbilityFactory: BlogsAbilityFactory,
+        private readonly blogLikesService: BlogLikesService,
+    ) {}
 
     GetOptions(
         findAllBlogDto: FindAllBlogDto,
@@ -90,5 +94,23 @@ export class BlogsFindAllProvider {
             deleted_at: ability.can(BlogAction.ReadDeletedBlog, Blog),
         };
         return select;
+    }
+
+    async provideBlogsWithLikes(blogs: Blog[], user_id: number) {
+        const blogsWithLikes = [];
+        for (let i = 0; i < blogs.length; i++) {
+            const element = blogs[i];
+            blogsWithLikes.push({
+                blog: element,
+                is_liked: await this.blogLikesService.isLiked(
+                    element.blog_id,
+                    user_id,
+                ),
+                like_count: await this.blogLikesService.likeCount(
+                    element.blog_id,
+                ),
+            });
+        }
+        return blogsWithLikes;
     }
 }

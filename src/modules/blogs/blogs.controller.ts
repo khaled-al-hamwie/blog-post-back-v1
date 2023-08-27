@@ -14,6 +14,7 @@ import {
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
 import { FindManyOptions, FindOneOptions } from "typeorm";
+import { BlogLikesService } from "../likes/providers/blog-likes.service";
 import { User } from "../users/entities/user.entity";
 import { BlogsService } from "./blogs.service";
 import { CreateBlogDto } from "./dto/create-blog.dto";
@@ -34,6 +35,7 @@ export class BlogsController {
         private readonly blogsAbilityFactory: BlogsAbilityFactory,
         private readonly blogsFindAllProvider: BlogsFindAllProvider,
         private readonly blogsFindOneProvider: BlogsFindOneProvider,
+        private readonly blogLikesService: BlogLikesService,
     ) {}
 
     @Post()
@@ -55,7 +57,10 @@ export class BlogsController {
             this.blogsFindAllProvider.GetOptions(findAllBlogDto, user);
         const blogs = await this.blogsService.findAll(option);
         if (blogs.length == 0) throw new BlogNotFoundException();
-        return blogs;
+        return this.blogsFindAllProvider.provideBlogsWithLikes(
+            blogs,
+            user.user_id,
+        );
     }
 
     @Get(":id")

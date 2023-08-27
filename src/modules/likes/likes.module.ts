@@ -14,12 +14,12 @@ import { CommentLikesService } from "./providers/comment-likes.service";
 @Module({
     imports: [
         TypeOrmModule.forFeature([BlogLike, CommentLike]),
-        BlogsModule,
+        forwardRef(() => BlogsModule),
         forwardRef(() => CommentsModule),
         UsersModule,
     ],
     controllers: [BlogLikesController, CommentLikesController],
     providers: [BlogLikesService, CommentLikesService, likesAbilityFactory],
-    exports: [CommentLikesService],
+    exports: [CommentLikesService, BlogLikesService],
 })
 export class LikesModule {}
