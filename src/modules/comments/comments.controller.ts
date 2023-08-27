@@ -55,11 +55,14 @@ export class CommentsController {
     }
 
     @Get("replies/:comment_id")
-    async getReply(@Param("comment_id", ParseIntPipe) comment_id: number) {
-        const option = this.commentsGetReplyProvider.GetOption(comment_id);
-        const comment = await this.commentsService.findOne(option);
-        if (!comment) throw new CommentNotFoundException();
-        return comment;
+    async getReply(
+        @Param("comment_id", ParseIntPipe) comment_id: number,
+        @UserDecorator("user_id") user_id: number,
+    ) {
+        return this.commentsGetReplyProvider.privideComment(
+            comment_id,
+            user_id,
+        );
     }
 
     @Get(":blog_id")
