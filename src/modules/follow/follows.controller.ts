@@ -14,6 +14,8 @@ import { User } from "../users/entities/user.entity";
 import { CreateFollowDto } from "./dto/create-follow.dto";
 import { FollowAction } from "./enums/follow.actions.enum";
 import { CannotFollowYourselfException } from "./exceptions/cannot-follow-yourself.exception";
+import { NoFollowerException } from "./exceptions/no-follower.exception";
+import { NoFollowingException } from "./exceptions/no-following.exception";
 import { followsAbilityFactory } from "./factories/follow-ability.factory";
 import { FollowsService } from "./follows.service";
 import { FollowShowFollowerProvider } from "./providers/follows.show-follower.provider";
@@ -45,15 +47,19 @@ export class FollowsController {
     }
 
     @Get("following")
-    showFollowing(@UserDecorator("user_id") user_id: number) {
+    async showFollowing(@UserDecorator("user_id") user_id: number) {
         const options = this.followsShowFollowingProvider.GetOptions(user_id);
-        return this.followersService.findAll(options);
+        const following = await this.followersService.findAll(options);
+        if (following.length < 1) throw new NoFollowingException();
+        return following;
     }
 
     @Get("followers")
-    showFollowers(@UserDecorator("user_id") user_id: number) {
+    async showFollowers(@UserDecorator("user_id") user_id: number) {
         const options = this.followsShowFollowerProvider.GetOptions(user_id);
-        return this.followersService.findAll(options);
+        const followers = await this.followersService.findAll(options);
+        if (followers.length < 1) throw new NoFollowerException();
+        return followers;
     }
 
     @Delete(":id")
