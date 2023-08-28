@@ -1,4 +1,5 @@
 import { Comment } from "src/modules/comments/entities/comment.entity";
+import { Favorite } from "src/modules/favorites/entities/favorite.entity";
 import { BlogLike } from "src/modules/likes/entities/blog-like.entity";
 import { User } from "src/modules/users/entities/user.entity";
 import {
@@ -51,4 +52,7 @@ export class Blog {
 
     @OneToMany(() => Comment, comment => comment.blog)
     comments: Comment[];
+
+    @OneToMany(() => Favorite, favorite => favorite.blog)
+    favorites: Favorite[];
 }
