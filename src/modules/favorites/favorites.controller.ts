@@ -4,11 +4,15 @@ import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
 import { User } from "../users/entities/user.entity";
 import { CreateFavoriteDto } from "./dto/create-favorite.dto";
 import { FavoritesService } from "./favorites.service";
+import { FavoritesFindAllProvider } from "./providers/favorites.findAll.provider";
 
 @UseGuards(LoggedInGuard)
 @Controller("favorites")
 export class FavoritesController {
-    constructor(private readonly favoritesService: FavoritesService) {}
+    constructor(
+        private readonly favoritesService: FavoritesService,
+        private readonly favoritesFindAllProvider: FavoritesFindAllProvider,
+    ) {}
 
     @Put()
     async toggle(
@@ -26,27 +30,7 @@ export class FavoritesController {
 
     @Get()
     findAll(@UserDecorator("user_id") user_id: number) {
-        return this.favoritesService.findAll({
-            where: { user: { user_id } },
-            order: { created_at: "ASC" },
-            relations: { blog: { user: true } },
-            select: {
-                favorite_id: true,
-                created_at: true,
-                blog: {
-                    blog_id: true,
-                    title: true,
-                    sub_title: true,
-                    blog_pic: true,
-                    user: {
-                        user_id: true,
-                        user_name: true,
-                        first_name: true,
-                        last_name: true,
-                        avatar: true,
-                    },
-                },
-            },
-        });
+        const options = this.favoritesFindAllProvider.GetOptions(user_id);
+        return this.favoritesService.findAll(options);
     }
 }
