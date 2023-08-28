@@ -52,7 +52,12 @@ export class FollowsController {
         const options = this.followsShowFollowingProvider.GetOptions(user_id);
         const following = await this.followersService.findAll(options);
         if (following.length < 1) throw new NoFollowingException();
-        return following;
+        return {
+            following,
+            following_count: await this.followersService.count({
+                where: { follower: { user_id } },
+            }),
+        };
     }
 
     @Get("followers")
@@ -60,7 +65,12 @@ export class FollowsController {
         const options = this.followsShowFollowerProvider.GetOptions(user_id);
         const followers = await this.followersService.findAll(options);
         if (followers.length < 1) throw new NoFollowerException();
-        return followers;
+        return {
+            followers,
+            followers_count: await this.followersService.count({
+                where: { user: { user_id } },
+            }),
+        };
     }
 
     @Delete(":follow_id")

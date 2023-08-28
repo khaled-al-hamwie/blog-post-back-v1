@@ -34,6 +34,10 @@ export class FollowsService {
         return this.followerEntity.findOne(options);
     }
 
+    count(options: FindManyOptions<Follow>) {
+        return this.followerEntity.count(options);
+    }
+
     remove(follow: Follow) {
         this.followerEntity.remove(follow);
         return { message: "follow has been removed" };
