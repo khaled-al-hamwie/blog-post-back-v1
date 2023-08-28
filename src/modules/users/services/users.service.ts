@@ -25,11 +25,7 @@ export class UsersService {
                 role_id,
             },
         });
-        const userWithSameUserName: User = await this.findOne({
-            where: { user_name: createUserDto.user_name },
-            withDeleted: true,
-        });
-        if (userWithSameUserName) throw new UserNameNotAllowedException();
+        await this.checkUserWithSameUserName(createUserDto.user_name);
         createUserDto.password = hashSync(createUserDto.password, 12);
         const user = this.usersRepository.create(createUserDto);
         user.role = role;
@@ -90,5 +86,13 @@ export class UsersService {
             return user;
         }
         return null;
+    }
+
+    private async checkUserWithSameUserName(user_name: string) {
+        const userWithSameUserName: User = await this.findOne({
+            where: { user_name },
+            withDeleted: true,
+        });
+        if (userWithSameUserName) throw new UserNameNotAllowedException();
     }
 }
