@@ -1,8 +1,7 @@
 import { Injectable, UseGuards } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
-import { FindOneOptions, Repository } from "typeorm";
-import { User } from "../users/entities/user.entity";
+import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import { UserNotFoundException } from "../users/exceptions/userNotFound.exception";
 import { UsersService } from "../users/services/users.service";
 import { CreateFollowDto } from "./dto/create-follow.dto";
@@ -27,8 +26,8 @@ export class FollowsService {
         return { message: "follow has been added" };
     }
 
-    findAll() {
-        return `This action returns all followers`;
+    findAll(options: FindManyOptions<Follow>) {
+        return this.followerEntity.find(options);
     }
 
     findOne(options: FindOneOptions<Follow>) {
