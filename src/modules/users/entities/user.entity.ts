@@ -1,7 +1,7 @@
 import { Blog } from "src/modules/blogs/entities/blog.entity";
 import { Comment } from "src/modules/comments/entities/comment.entity";
 import { Favorite } from "src/modules/favorites/entities/favorite.entity";
-import { Follow } from "src/modules/followers/entities/follower.entity";
+import { Follow } from "src/modules/follow/entities/follow.entity";
 import { BlogLike } from "src/modules/likes/entities/blog-like.entity";
 import { CommentLike } from "src/modules/likes/entities/comment-like.entity";
 import { Role } from "src/modules/roles/entities/role.entity";
