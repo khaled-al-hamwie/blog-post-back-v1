@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import { BlogsService } from "../blogs/blogs.service";
 import { BlogNotFoundException } from "../blogs/exceptions/BlogNotFound.exception";
 import { UsersService } from "../users/services/users.service";
@@ -30,15 +30,23 @@ export class FavoritesService {
         return { message: "favorite has been added" };
     }
 
-    findAll() {
-        return `This action returns all favorites`;
+    findAll(options: FindManyOptions<Favorite>) {
+        return this.favoriteRepositry.find(options);
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} favorite`;
+    findOne(options: FindOneOptions<Favorite>) {
+        return this.favoriteRepositry.findOne(options);
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} favorite`;
+    async checkCreated(user_id: number, blog_id: number) {
+        const favorite = await this.findOne({
+            where: { user: { user_id }, blog: { blog_id } },
+        });
+        return favorite ? favorite : null;
+    }
+
+    remove(favorite: Favorite) {
+        this.favoriteRepositry.remove(favorite);
+        return { message: "favorite has been removed" };
     }
 }
