@@ -34,8 +34,9 @@ export class FollowsService {
         return this.followerEntity.findOne(options);
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} follower`;
+    remove(follow: Follow) {
+        this.followerEntity.remove(follow);
+        return { message: "follow has been removed" };
     }
 
     private async checkAlreadyFollow(createFollowerDto: CreateFollowDto) {

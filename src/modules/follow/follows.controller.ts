@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Param,
+    ParseIntPipe,
     Post,
     UnauthorizedException,
     UseGuards,
@@ -62,8 +63,18 @@ export class FollowsController {
         return followers;
     }
 
-    @Delete(":id")
-    remove(@Param("id") id: string) {
-        return this.followersService.remove(+id);
+    @Delete(":follow_id")
+    async remove(
+        @Param("follow_id", ParseIntPipe) follow_id: number,
+        @UserDecorator("user_id") user_id: number,
+    ) {
+        if ((FollowAction.UnFollow, User)) {
+            const follow = await this.followersService.findOne({
+                where: { follow_id, follower: { user_id } },
+            });
+            if (!follow) throw new NoFollowerException();
+            return this.followersService.remove(follow);
+        }
+        throw new UnauthorizedException();
     }
 }
