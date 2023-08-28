@@ -7,8 +7,11 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Put,
     UnauthorizedException,
+    UploadedFile,
     UseGuards,
+    UseInterceptors,
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
@@ -20,6 +23,7 @@ import { User } from "./entities/user.entity";
 import { UserNotFoundException } from "./exceptions/userNotFound.exception";
 import { UserUnauthorizedException } from "./exceptions/userUnauthorized.exception";
 import { UsersAbilityFactory } from "./factories/users-ability.factory";
+import { AvatarInterceptor } from "./interceptors/avatar.interceptor";
 import { UsersService } from "./services/users.service";
 @UseGuards(LoggedInGuard)
 @Controller("users")
@@ -75,6 +79,15 @@ export class UsersController {
         @Body() updateUserDto: UpdateUserDto,
     ) {
         await this.usersService.update(user, updateUserDto);
+    }
+
+    @UseInterceptors(AvatarInterceptor)
+    @Put("avatar")
+    async addAvatar(
+        @UserDecorator("user_id") user_id: number,
+        @UploadedFile() avatar: Express.Multer.File,
+    ) {
+        return this.usersService.putAvatar(user_id, avatar);
     }
 
     @Delete()

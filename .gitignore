@@ -36,3 +36,6 @@ lerna-debug.log*
 
 .env
 /tasks
+
+/uploads/avatars
+/uploads/pictures

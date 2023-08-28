@@ -58,6 +58,13 @@ export class UsersService {
         return { message: "user has been updated succsesfully" };
     }
 
+    async putAvatar(user_id: number, avatar: Express.Multer.File) {
+        const user = await this.findOne({ where: { user_id } });
+        user.avatar = avatar ? avatar.path : "";
+        this.usersRepository.save(user);
+        return { message: "avatar has been upload" };
+    }
+
     async remove(user: User) {
         if (!user) throw new UserNotFoundException();
         this.usersRepository.softRemove(user);
