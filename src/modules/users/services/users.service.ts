@@ -17,12 +17,9 @@ export class UsersService {
         private readonly rolesService: RolesService,
     ) {}
     async create(createUserDto: CreateUserDto) {
-        let role_id = 1;
-        if (createUserDto.role_id && createUserDto.role_id == 3)
-            role_id = createUserDto.role_id;
         const role = await this.rolesService.findOne({
             where: {
-                role_id,
+                role_id: createUserDto.role_id,
             },
         });
         await this.checkUserWithSameUserName(createUserDto.user_name);
