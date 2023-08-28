@@ -24,6 +24,7 @@ import { UserNotFoundException } from "./exceptions/userNotFound.exception";
 import { UserUnauthorizedException } from "./exceptions/userUnauthorized.exception";
 import { UsersAbilityFactory } from "./factories/users-ability.factory";
 import { AvatarInterceptor } from "./interceptors/avatar.interceptor";
+import { UsersFindAllProvider } from "./providers/users-findAll.provider";
 import { UsersService } from "./services/users.service";
 @UseGuards(LoggedInGuard)
 @Controller("users")
@@ -31,19 +32,16 @@ export class UsersController {
     constructor(
         private readonly usersService: UsersService,
         private readonly usersAbilityFactory: UsersAbilityFactory,
+        private readonly usersFindAllProvider: UsersFindAllProvider,
     ) {}
 
     @Get()
     findAll(@UserDecorator() user: User) {
         const ability = this.usersAbilityFactory.createForUser(user);
-        if (ability.can(Action.Read, User))
-            return this.usersService.findAll({
-                select: {
-                    user_id: true,
-                    first_name: true,
-                    last_name: true,
-                },
-            });
+        if (ability.can(Action.Read, User)) {
+            const options = this.usersFindAllProvider.GetOptions();
+            return this.usersService.findAll(options);
+        }
         throw new UnauthorizedException();
     }
     @Get("profile")
