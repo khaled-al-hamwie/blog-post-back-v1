@@ -5,6 +5,7 @@ import { Follow } from "./entities/follow.entity";
 import { followsAbilityFactory } from "./factories/follow-ability.factory";
 import { FollowsController } from "./follows.controller";
 import { FollowsService } from "./follows.service";
+import { FollowShowFollowerProvider } from "./providers/follows.show-follower.provider";
 import { FollowShowFollowingProvider } from "./providers/follows.show-following.provider";
 
 @Module({
@@ -14,6 +15,7 @@ import { FollowShowFollowingProvider } from "./providers/follows.show-following.
         FollowsService,
         followsAbilityFactory,
         FollowShowFollowingProvider,
+        FollowShowFollowerProvider,
     ],
 })
 export class FollowsModule {}

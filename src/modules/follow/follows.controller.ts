@@ -16,6 +16,7 @@ import { FollowAction } from "./enums/follow.actions.enum";
 import { CannotFollowYourselfException } from "./exceptions/cannot-follow-yourself.exception";
 import { followsAbilityFactory } from "./factories/follow-ability.factory";
 import { FollowsService } from "./follows.service";
+import { FollowShowFollowerProvider } from "./providers/follows.show-follower.provider";
 import { FollowShowFollowingProvider } from "./providers/follows.show-following.provider";
 
 @UseGuards(LoggedInGuard)
@@ -25,6 +26,7 @@ export class FollowsController {
         private readonly followersService: FollowsService,
         private readonly followAbilityFactory: followsAbilityFactory,
         private readonly followsShowFollowingProvider: FollowShowFollowingProvider,
+        private readonly followsShowFollowerProvider: FollowShowFollowerProvider,
     ) {}
 
     @Post()
@@ -49,8 +51,9 @@ export class FollowsController {
     }
 
     @Get("followers")
-    showFollowers() {
-        return "";
+    showFollowers(@UserDecorator("user_id") user_id: number) {
+        const options = this.followsShowFollowerProvider.GetOptions(user_id);
+        return this.followersService.findAll(options);
     }
 
     @Delete(":id")
