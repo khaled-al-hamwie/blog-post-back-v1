@@ -12,39 +12,44 @@ import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
 import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/services/users.service";
-import { CreateFollowerDto } from "./dto/create-follower.dto";
+import { CreateFollowDto } from "./dto/create-follow.dto";
 import { FollowAction } from "./enums/follow.actions.enum";
 import { CannotFollowYourselfException } from "./exceptions/cannot-follow-yourself.exception";
 import { followsAbilityFactory } from "./factories/follow-ability.factory";
-import { FollowersService } from "./followers.service";
+import { FollowsService } from "./follows.service";
 
 @UseGuards(LoggedInGuard)
-@Controller("followers")
-export class FollowersController {
+@Controller("follows")
+export class FollowsController {
     constructor(
-        private readonly followersService: FollowersService,
+        private readonly followersService: FollowsService,
         private readonly followAbilityFactory: followsAbilityFactory,
         private readonly usersService: UsersService,
     ) {}
 
     @Post()
     async create(
-        @Body() createFollowerDto: CreateFollowerDto,
+        @Body() createFollowsDto: CreateFollowDto,
         @UserDecorator() user: User,
     ) {
-        if (createFollowerDto.user_id == user.user_id)
+        if (createFollowsDto.user_id == user.user_id)
             throw new CannotFollowYourselfException();
         const ability = this.followAbilityFactory.createForUser(user);
         if (ability.can(FollowAction.Follow, User)) {
-            createFollowerDto.follower_id = user.user_id;
-            return this.followersService.create(createFollowerDto);
+            createFollowsDto.follower_id = user.user_id;
+            return this.followersService.create(createFollowsDto);
         }
         throw new UnauthorizedException();
     }
 
     @Get()
-    findAll() {
+    showFollowing() {
         return this.followersService.findAll();
+    }
+
+    @Get()
+    showFollowers() {
+        return "";
     }
 
     @Delete(":id")

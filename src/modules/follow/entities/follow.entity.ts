@@ -2,7 +2,7 @@ import { User } from "src/modules/users/entities/user.entity";
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Follower {
+export class Follow {
     @PrimaryGeneratedColumn({ unsigned: true, type: "int" })
     follow_id: number;
 

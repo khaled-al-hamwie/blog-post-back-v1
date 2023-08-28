@@ -1,6 +1,6 @@
 import { IsInt, Min } from "class-validator";
 
-export class CreateFollowerDto {
+export class CreateFollowDto {
     @IsInt()
     @Min(0)
     user_id: number;

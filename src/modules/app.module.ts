@@ -3,13 +3,13 @@ import { ConfigModule } from "@nestjs/config";
 import { SessionsModule } from "src/core/sessions/sessions.module";
 import { DatabaseModule } from "../core/database/database.module";
 import { AuthModule } from "./auth/auth.module";
-import { UsersModule } from "./users/users.module";
+import { BlogsModule } from "./blogs/blogs.module";
+import { CommentsModule } from "./comments/comments.module";
+import { FavoritesModule } from "./favorites/favorites.module";
+import { FollowsModule } from "./follow/follows.module";
+import { LikesModule } from "./likes/likes.module";
 import { RolesModule } from "./roles/roles.module";
-import { BlogsModule } from './blogs/blogs.module';
-import { LikesModule } from './likes/likes.module';
-import { CommentsModule } from './comments/comments.module';
-import { FavoritesModule } from './favorites/favorites.module';
-import { FollowersModule } from './followers/followers.module';
+import { UsersModule } from "./users/users.module";
 
 @Module({
     imports: [
@@ -23,7 +23,7 @@ import { FollowersModule } from './followers/followers.module';
         LikesModule,
         CommentsModule,
         FavoritesModule,
-        FollowersModule,
+        FollowsModule,
     ],
 })
 export class AppModule {}

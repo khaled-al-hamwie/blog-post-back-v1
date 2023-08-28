@@ -5,19 +5,19 @@ import { FindOneOptions, Repository } from "typeorm";
 import { User } from "../users/entities/user.entity";
 import { UserNotFoundException } from "../users/exceptions/userNotFound.exception";
 import { UsersService } from "../users/services/users.service";
-import { CreateFollowerDto } from "./dto/create-follower.dto";
-import { Follower } from "./entities/follower.entity";
+import { CreateFollowDto } from "./dto/create-follow.dto";
+import { Follow } from "./entities/follow.entity";
 import { AlreadyFollowedException } from "./exceptions/already-followed.exception";
 
 @UseGuards(LoggedInGuard)
 @Injectable()
-export class FollowersService {
+export class FollowsService {
     constructor(
-        @InjectRepository(Follower)
-        private readonly followerEntity: Repository<Follower>,
+        @InjectRepository(Follow)
+        private readonly followerEntity: Repository<Follow>,
         private readonly usersService: UsersService,
     ) {}
-    async create(createFollowerDto: CreateFollowerDto) {
+    async create(createFollowerDto: CreateFollowDto) {
         await this.checkAlreadyFollow(createFollowerDto);
 
         const follow = this.followerEntity.create();
@@ -31,7 +31,7 @@ export class FollowersService {
         return `This action returns all followers`;
     }
 
-    findOne(options: FindOneOptions<Follower>) {
+    findOne(options: FindOneOptions<Follow>) {
         return this.followerEntity.findOne(options);
     }
 
@@ -39,7 +39,7 @@ export class FollowersService {
         return `This action removes a #${id} follower`;
     }
 
-    private async checkAlreadyFollow(createFollowerDto: CreateFollowerDto) {
+    private async checkAlreadyFollow(createFollowerDto: CreateFollowDto) {
         const alreadyFollow = await this.findOne({
             where: {
                 user: { user_id: createFollowerDto.user_id },
