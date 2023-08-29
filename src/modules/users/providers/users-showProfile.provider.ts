@@ -9,6 +9,7 @@ export class UsersShowProfileProvider {
         options.where = { user_id };
         options.select = {
             user_id: true,
+            user_name: true,
             first_name: true,
             last_name: true,
             avatar: true,
