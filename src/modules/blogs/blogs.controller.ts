@@ -12,10 +12,10 @@ import {
     UploadedFile,
     UseGuards,
     UseInterceptors,
-    UsePipes,
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UploadService } from "src/core/uploads/upload.service";
 import { FindManyOptions, FindOneOptions } from "typeorm";
 import { User } from "../users/entities/user.entity";
@@ -51,7 +51,6 @@ export class BlogsController {
         @UploadedFile(new BlogPicPipe()) image?: Express.Multer.File,
     ) {
         if (image) {
-            console.log(image);
             createBlogDto.blog_pic = this.UploadService.createName(
                 image.originalname,
             );
