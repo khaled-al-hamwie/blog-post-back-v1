@@ -9,10 +9,14 @@ import {
     Post,
     Query,
     UnauthorizedException,
+    UploadedFile,
     UseGuards,
+    UseInterceptors,
+    UsePipes,
 } from "@nestjs/common";
 import { UserDecorator } from "src/core/common/decorators/user.decorator";
 import { LoggedInGuard } from "src/core/common/guards/logged-in.guard";
+import { UploadService } from "src/core/uploads/upload.service";
 import { FindManyOptions, FindOneOptions } from "typeorm";
 import { User } from "../users/entities/user.entity";
 import { BlogsService } from "./blogs.service";
@@ -23,6 +27,8 @@ import { Blog } from "./entities/blog.entity";
 import { BlogAction } from "./enums/blogs.actions.enum";
 import { BlogNotFoundException } from "./exceptions/BlogNotFound.exception";
 import { BlogsAbilityFactory } from "./factories/blogs-ability.factory";
+import { BlogsInterceptor } from "./interceptors/blog.interceptor";
+import { BlogPicPipe } from "./pipes/blog-pic.pipe";
 import { BlogsFindAllProvider } from "./providers/blogs.findAll.provider";
 import { BlogsFindOneProvider } from "./providers/blogs.findOne.provider";
 
@@ -34,10 +40,27 @@ export class BlogsController {
         private readonly blogsAbilityFactory: BlogsAbilityFactory,
         private readonly blogsFindAllProvider: BlogsFindAllProvider,
         private readonly blogsFindOneProvider: BlogsFindOneProvider,
+        private readonly UploadService: UploadService,
     ) {}
 
+    @UseInterceptors(BlogsInterceptor)
     @Post()
-    create(@Body() createBlogDto: CreateBlogDto, @UserDecorator() user: User) {
+    create(
+        @Body() createBlogDto: CreateBlogDto,
+        @UserDecorator() user: User,
+        @UploadedFile(new BlogPicPipe()) image?: Express.Multer.File,
+    ) {
+        if (image) {
+            console.log(image);
+            createBlogDto.blog_pic = this.UploadService.createName(
+                image.originalname,
+            );
+            this.UploadService.upload(
+                image.buffer,
+                createBlogDto.blog_pic,
+                "blogs",
+            );
+        }
         const ability = this.blogsAbilityFactory.createForUser(user);
         if (ability.can(BlogAction.CreateBlog, Blog)) {
             createBlogDto.author_id = user.user_id;

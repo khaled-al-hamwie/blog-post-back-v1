@@ -1,3 +1,4 @@
+import { Transform } from "class-transformer";
 import { IsInt, IsString, Length, Min } from "class-validator";
 
 export class CreateBlogDto {
@@ -13,9 +14,12 @@ export class CreateBlogDto {
     @Length(10, 5000)
     document: string;
 
+    @Transform(({ value }) => Number(value))
     @IsInt()
     @Min(1)
     minute_to_read: number;
 
     author_id: number;
+
+    blog_pic: string;
 }

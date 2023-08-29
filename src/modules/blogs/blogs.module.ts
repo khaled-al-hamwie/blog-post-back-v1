@@ -1,5 +1,6 @@
 import { Module, forwardRef } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { UploadModule } from "src/core/uploads/upload.module";
 import { LikesModule } from "../likes/likes.module";
 import { UsersModule } from "../users/users.module";
 import { BlogsController } from "./blogs.controller";
@@ -14,6 +15,7 @@ import { BlogsFindOneProvider } from "./providers/blogs.findOne.provider";
         TypeOrmModule.forFeature([Blog]),
         UsersModule,
         forwardRef(() => LikesModule),
+        UploadModule,
     ],
     controllers: [BlogsController],
     providers: [
