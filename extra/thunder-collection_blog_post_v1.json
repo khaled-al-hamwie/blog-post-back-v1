@@ -1,0 +1,647 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "blog_post_v1",
+    "dateExported": "2023-08-29T16:58:10.374Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "7489b4af-ed6c-4201-a9f2-76275c0b275b",
+            "name": "auth",
+            "containerId": "",
+            "created": "2023-08-20T15:20:50.706Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "4043f400-58f7-4849-bff4-ced86dadf9d4",
+            "name": "Role",
+            "containerId": "",
+            "created": "2023-08-20T17:31:21.086Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "User",
+            "containerId": "",
+            "created": "2023-08-22T10:39:51.723Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "8b0f16fb-af40-4e5e-9e64-cd08b660ecd6",
+            "name": "Blog",
+            "containerId": "",
+            "created": "2023-08-23T10:19:00.232Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "cd43517f-43e6-4622-91fd-638a25ff9fc3",
+            "name": "Like",
+            "containerId": "",
+            "created": "2023-08-25T15:37:22.207Z",
+            "sortNum": 50000
+        },
+        {
+            "_id": "bafda5ea-7bf1-47b0-a5e0-48cc782bfe6e",
+            "name": "Comment",
+            "containerId": "",
+            "created": "2023-08-26T12:03:13.702Z",
+            "sortNum": 60000
+        },
+        {
+            "_id": "25522f02-b156-4f07-8d39-09d31e4275f1",
+            "name": "Favorite",
+            "containerId": "",
+            "created": "2023-08-28T07:37:06.824Z",
+            "sortNum": 80000
+        },
+        {
+            "_id": "d2fc324f-1f16-4816-b445-e942fbab46c2",
+            "name": "Follow",
+            "containerId": "",
+            "created": "2023-08-28T11:42:36.115Z",
+            "sortNum": 90000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "1208c2f7-ee3e-4797-894c-f2de6d9d1273",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "7489b4af-ed6c-4201-a9f2-76275c0b275b",
+            "name": "register",
+            "url": "{{url}}/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-08-01T19:55:57.357Z",
+            "modified": "2023-08-28T21:10:02.964Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"khaled8qa1\",\n  \"password\":\"1111111111\",\n  \"first_name\":\"khaled\",\n  \"last_name\":\"al hamwie\",\n  \"role_id\":12\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "b580adde-f8c6-4ad8-9f15-9c4c52c9ea07",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "4043f400-58f7-4849-bff4-ced86dadf9d4",
+            "name": "Role",
+            "url": "{{url}}/roles",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-08-20T17:10:18.046Z",
+            "modified": "2023-08-20T17:10:37.570Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "09549515-4b86-472a-b723-ae53092a7251",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "25522f02-b156-4f07-8d39-09d31e4275f1",
+            "name": "toggle favorite",
+            "url": "{{url}}/favorites",
+            "method": "PUT",
+            "sortNum": 10000,
+            "created": "2023-08-28T07:36:55.832Z",
+            "modified": "2023-08-28T07:58:49.912Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"blog_id\":3\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "656292db-ee5d-47b7-ac8c-af8b4d2b0eff",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "7489b4af-ed6c-4201-a9f2-76275c0b275b",
+            "name": "register admin",
+            "url": "{{url}}/admin/register",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-08-01T21:48:16.015Z",
+            "modified": "2023-08-28T21:12:06.437Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"khaled-al-hamwie511\",\n  \"password\":\"11111111\",\n  \"first_name\":\"booo\",\n  \"last_name\":\"al hamwie\",\n  \"role_id\":2\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a6b0b505-04e0-45a0-9275-e26954288bb5",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "7489b4af-ed6c-4201-a9f2-76275c0b275b",
+            "name": "login",
+            "url": "{{url}}/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-08-01T21:47:05.122Z",
+            "modified": "2023-08-28T21:10:39.877Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"khaled81\",\n  \"password\":\"1111111111\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "cdf5050c-7cdb-499e-b6cf-56bfad743a78",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "7489b4af-ed6c-4201-a9f2-76275c0b275b",
+            "name": "logout",
+            "url": "{{url}}/logout",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-08-20T16:50:18.252Z",
+            "modified": "2023-08-20T16:50:37.700Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"khaled-al-hamwie\",\n  \"password\":\"thisisthejlajfalsjf\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a39cca72-a568-43ce-aad8-666a216b5da7",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "find All User",
+            "url": "{{url}}/users",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-08-22T10:40:02.747Z",
+            "modified": "2023-08-22T10:40:15.762Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "eb7e8f96-fded-4f68-810e-4fcbbabced9c",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "show profile",
+            "url": "{{url}}/users/profile",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-08-22T10:48:53.332Z",
+            "modified": "2023-08-22T10:49:08.424Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "dd40869b-6d04-4d9c-9283-5b777413af7e",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "find user by Id",
+            "url": "{{url}}/users/10",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2023-08-22T12:54:02.564Z",
+            "modified": "2023-08-25T14:29:23.973Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "fb2d9c8a-776a-484c-a77e-ce5245931188",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "update account",
+            "url": "{{url}}/users",
+            "method": "PATCH",
+            "sortNum": 90000,
+            "created": "2023-08-22T17:14:11.341Z",
+            "modified": "2023-08-22T18:17:14.575Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"khaled al hamw\",\n  \"first_name\":\"jjfalja\",\n  \"last_name\":\"bla aaa \"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "56d43839-47fc-45b7-8172-1e6d6d45ec9d",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "delete account",
+            "url": "{{url}}/users",
+            "method": "DELETE",
+            "sortNum": 100000,
+            "created": "2023-08-23T03:28:21.100Z",
+            "modified": "2023-08-23T03:28:54.780Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "5672d578-ec99-453f-9512-9b54dcf2c246",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "8b0f16fb-af40-4e5e-9e64-cd08b660ecd6",
+            "name": "create blog",
+            "url": "{{url}}/blogs",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2023-08-23T10:19:08.558Z",
+            "modified": "2023-08-29T11:54:02.722Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "title",
+                        "value": "blaaa"
+                    },
+                    {
+                        "name": "sub_title",
+                        "value": "this is the blaa bal"
+                    },
+                    {
+                        "name": "document",
+                        "value": "this is the blaa bal"
+                    },
+                    {
+                        "name": "minute_to_read",
+                        "value": "2"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "blog_pic",
+                        "value": "/home/khaled/Pictures/images/weather-app/design-1.png"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "1f883b8c-157a-4ca2-beb1-7a24d32d4efe",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "block user",
+            "url": "{{url}}/users/6",
+            "method": "DELETE",
+            "sortNum": 110000,
+            "created": "2023-08-23T07:31:00.505Z",
+            "modified": "2023-08-23T07:56:04.644Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "976a50dd-5135-422e-8e85-3868567e3580",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "restore user",
+            "url": "{{url}}/users/restore",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2023-08-23T08:35:32.263Z",
+            "modified": "2023-08-23T08:45:25.569Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_name\":\"khaled811\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "29c040b9-6a03-4286-b40b-905b6c4f8e0c",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "8b0f16fb-af40-4e5e-9e64-cd08b660ecd6",
+            "name": "find All blogs",
+            "url": "{{url}}/blogs?page=0",
+            "method": "GET",
+            "sortNum": 130000,
+            "created": "2023-08-23T15:54:49.196Z",
+            "modified": "2023-08-27T17:51:01.017Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "title",
+                    "value": "the",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "page",
+                    "value": "0",
+                    "isPath": false
+                },
+                {
+                    "name": "user_name",
+                    "value": "khaled88",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "created_before",
+                    "value": "2023-08-25",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "created_after",
+                    "value": "2020-01-01",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "only_mine",
+                    "value": "yes",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "only_deleted",
+                    "value": "yes",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "16ea6ac6-f09c-470d-9b80-beffbeef7b82",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "8b0f16fb-af40-4e5e-9e64-cd08b660ecd6",
+            "name": "find Blog by id",
+            "url": "{{url}}/blogs/6",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2023-08-23T16:34:01.162Z",
+            "modified": "2023-08-25T14:26:51.654Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "e9a9dda7-6e36-4019-876b-8a3531c38b1a",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "8b0f16fb-af40-4e5e-9e64-cd08b660ecd6",
+            "name": "update Blog by id",
+            "url": "{{url}}/blogs/5",
+            "method": "PATCH",
+            "sortNum": 150000,
+            "created": "2023-08-23T16:48:55.799Z",
+            "modified": "2023-08-25T07:53:13.127Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\":\"this will be updated \"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "c37bc43c-0af4-400d-a835-0c741dafb8c2",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "8b0f16fb-af40-4e5e-9e64-cd08b660ecd6",
+            "name": "remove Blog by id",
+            "url": "{{url}}/blogs/1",
+            "method": "DELETE",
+            "sortNum": 160000,
+            "created": "2023-08-23T17:28:18.528Z",
+            "modified": "2023-08-25T13:49:12.683Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0bc84e4a-d90f-43dd-b7a1-39b507ebb747",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "cd43517f-43e6-4622-91fd-638a25ff9fc3",
+            "name": "add like to blog",
+            "url": "{{url}}/likes/blogs/6",
+            "method": "PUT",
+            "sortNum": 170000,
+            "created": "2023-08-25T15:37:32.950Z",
+            "modified": "2023-08-27T18:01:01.559Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "99dbf93f-e284-4c64-a420-a000e99b5245",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "cd43517f-43e6-4622-91fd-638a25ff9fc3",
+            "name": "add like to comment",
+            "url": "{{url}}/likes/comments/2",
+            "method": "PUT",
+            "sortNum": 175000,
+            "created": "2023-08-27T15:57:03.980Z",
+            "modified": "2023-08-27T18:37:37.880Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "e730a627-bdab-4bcb-9d62-71722d6a0eb6",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "bafda5ea-7bf1-47b0-a5e0-48cc782bfe6e",
+            "name": "create comment",
+            "url": "{{url}}/comments/3",
+            "method": "POST",
+            "sortNum": 190000,
+            "created": "2023-08-26T12:03:25.692Z",
+            "modified": "2023-08-27T16:42:18.811Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"comment\":\"comment by me\",\n  \"comment_id\":2\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "beacbf24-12b8-4f9a-a677-a6d38d13fa4c",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "bafda5ea-7bf1-47b0-a5e0-48cc782bfe6e",
+            "name": "get comments",
+            "url": "{{url}}/comments/3?sort=newest&page=0",
+            "method": "GET",
+            "sortNum": 200000,
+            "created": "2023-08-26T12:44:05.623Z",
+            "modified": "2023-08-26T15:00:57.584Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "sort",
+                    "value": "newest",
+                    "isPath": false
+                },
+                {
+                    "name": "page",
+                    "value": "0",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "7a1fcdf7-8821-47df-9cbb-ace9485e5dba",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "bafda5ea-7bf1-47b0-a5e0-48cc782bfe6e",
+            "name": "get comments reply",
+            "url": "{{url}}/comments/replies/2",
+            "method": "GET",
+            "sortNum": 205000,
+            "created": "2023-08-26T16:40:45.023Z",
+            "modified": "2023-08-27T18:35:37.714Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "c59b83de-47af-44a7-a8fb-1f82f74b5d00",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "bafda5ea-7bf1-47b0-a5e0-48cc782bfe6e",
+            "name": "update comment",
+            "url": "{{url}}/comments/3",
+            "method": "PATCH",
+            "sortNum": 210000,
+            "created": "2023-08-26T13:08:10.078Z",
+            "modified": "2023-08-26T13:09:20.403Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"comment\":\"this is update\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "502d7b35-6559-45b3-a6a3-9b35f8ae56bb",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "bafda5ea-7bf1-47b0-a5e0-48cc782bfe6e",
+            "name": "delete comment",
+            "url": "{{url}}/comments/1",
+            "method": "DELETE",
+            "sortNum": 220000,
+            "created": "2023-08-26T14:58:52.441Z",
+            "modified": "2023-08-27T16:36:25.989Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "39dc6a87-6682-40b8-afd9-9bb2099263df",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "25522f02-b156-4f07-8d39-09d31e4275f1",
+            "name": "get all favorite",
+            "url": "{{url}}/favorites",
+            "method": "GET",
+            "sortNum": 240000,
+            "created": "2023-08-28T08:00:02.397Z",
+            "modified": "2023-08-28T08:00:14.572Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "fd25d80f-b1db-4e80-aa96-d0e95eecb8f5",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "d2fc324f-1f16-4816-b445-e942fbab46c2",
+            "name": "follow a user",
+            "url": "{{url}}/follows",
+            "method": "POST",
+            "sortNum": 250000,
+            "created": "2023-08-28T11:42:49.097Z",
+            "modified": "2023-08-28T12:11:50.719Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"user_id\":15\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "73425686-5b4f-4c68-b15e-8ac2d9bc73d4",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "d2fc324f-1f16-4816-b445-e942fbab46c2",
+            "name": "show who I am following",
+            "url": "{{url}}/follows/following",
+            "method": "GET",
+            "sortNum": 260000,
+            "created": "2023-08-28T12:16:58.404Z",
+            "modified": "2023-08-28T12:17:18.998Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2cc6068b-bcf5-4053-b21a-c94de1f2139e",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "0eafbe5f-06ab-47fd-a9ba-7349e06e0755",
+            "name": "upload avatar",
+            "url": "{{url}}/users/avatar",
+            "method": "PUT",
+            "sortNum": 260000,
+            "created": "2023-08-28T14:49:02.695Z",
+            "modified": "2023-08-28T20:27:51.343Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "avatar",
+                        "value": "/home/khaled/Pictures/Webcam/2023-07-02-224029.jpg"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "85c5145d-a283-4c67-96dd-c62c19b5de96",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "d2fc324f-1f16-4816-b445-e942fbab46c2",
+            "name": "show who are my followers",
+            "url": "{{url}}/follows/followers",
+            "method": "GET",
+            "sortNum": 270000,
+            "created": "2023-08-28T12:40:23.242Z",
+            "modified": "2023-08-28T12:40:29.684Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "1c8fcaa1-df13-4d96-b711-c6b9f16203d1",
+            "colId": "ca2caa46-e2fb-43ee-9e8d-380d401402d8",
+            "containerId": "d2fc324f-1f16-4816-b445-e942fbab46c2",
+            "name": "unfollow a user",
+            "url": "{{url}}/follows/1",
+            "method": "DELETE",
+            "sortNum": 280000,
+            "created": "2023-08-28T14:02:25.020Z",
+            "modified": "2023-08-28T14:02:33.963Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
