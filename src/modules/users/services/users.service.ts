@@ -35,7 +35,7 @@ export class UsersService {
     }
 
     async findOne(
-        options: FindOneOptions,
+        options: FindOneOptions<User>,
         delete_password = true,
     ): Promise<User> {
         const requiredUser = await this.usersRepository.findOne(options);
