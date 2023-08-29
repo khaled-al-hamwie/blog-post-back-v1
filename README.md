@@ -37,6 +37,7 @@ before you start make sure you have
 
 now to start you should :
 
+- run `nvm use` if you are using [node js version manager](https://github.com/nvm-sh/nvm)
 - run `npm i` to install the required library
 - rename .env.sample to .env and set up your database credential and add your own session secret
 - now to create the mysql database run `npm run db:create` to create the database with the name of the .env variable `DB_NAME_DEVELOPMENT` and to drop it run `npm run db:drop`
