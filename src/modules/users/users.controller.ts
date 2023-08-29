@@ -25,6 +25,7 @@ import { UserUnauthorizedException } from "./exceptions/userUnauthorized.excepti
 import { UsersAbilityFactory } from "./factories/users-ability.factory";
 import { AvatarInterceptor } from "./interceptors/avatar.interceptor";
 import { UsersFindAllProvider } from "./providers/users-findAll.provider";
+import { UsersShowProfileProvider } from "./providers/users-showProfile.provider";
 import { UsersService } from "./services/users.service";
 @UseGuards(LoggedInGuard)
 @Controller("users")
@@ -33,6 +34,7 @@ export class UsersController {
         private readonly usersService: UsersService,
         private readonly usersAbilityFactory: UsersAbilityFactory,
         private readonly usersFindAllProvider: UsersFindAllProvider,
+        private readonly usersShowProfileProvider: UsersShowProfileProvider,
     ) {}
 
     @Get()
@@ -46,11 +48,8 @@ export class UsersController {
     }
     @Get("profile")
     async showProfile(@UserDecorator() user: User) {
-        const ability = this.usersAbilityFactory.createForUser(user);
-        const profile = await this.usersService.findOne({
-            where: { user_id: user.user_id },
-            relations: { role: ability.can(Action.Read, User, "role") },
-        });
+        const options = this.usersShowProfileProvider.GetOptions(user.user_id);
+        const profile = await this.usersService.findOne(options);
         return profile;
     }
     @Get(":id")
